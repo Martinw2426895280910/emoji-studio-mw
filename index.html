@@ -577,8 +577,14 @@ function selCat(cat,btn){
   btn.classList.add('on');renderEmojiGrid();
 }
 function renderEmojiGrid(){
-  document.getElementById('emoji-grid').innerHTML=CATS[catActual].map((e,i)=>
-    `<button class="emoji-btn${e===emojiActual?' sel':''}" onclick="selEmoji(CATS[catActual][${i}])">${e}</button>`).join('');
+  const grid = document.getElementById('emoji-grid');
+  grid.innerHTML = CATS[catActual].map(e=>
+    `<button class="emoji-btn${e===emojiActual?' sel':''}" data-emoji="${encodeURIComponent(e)}">${e}</button>`
+  ).join('');
+  grid.onclick = function(ev){
+    const btn = ev.target.closest('.emoji-btn');
+    if(btn) selEmoji(decodeURIComponent(btn.dataset.emoji));
+  };
 }
 function selEmoji(e){
   emojiActual=e;
@@ -977,11 +983,17 @@ function guardarHistorial(emoji,anim){
 function renderHistorial(){
   const grid=document.getElementById('hist-grid');
   if(!historial.length){grid.innerHTML='<div style="color:var(--sutil);font-size:12px;font-weight:600">¡Empezá a animar!</div>';return;}
-  grid.innerHTML=historial.map((h,i)=>
-    `<div class="hist-item" onclick="cargarHistorial(historial[${i}].emoji,historial[${i}].anim)">
+  grid.innerHTML=historial.map((h)=>
+    `<div class="hist-item" data-emoji="${encodeURIComponent(h.emoji)}" data-anim="${h.anim}">
       ${h.emoji}<span class="hist-lbl">${ANIMS.find(a=>a.id===h.anim)?.ico||'✨'}</span>
-      <span onclick="event.stopPropagation();toggleFav(historial[${i}].emoji)" style="font-size:12px;cursor:pointer">${favoritos.includes(h.emoji)?'⭐':'☆'}</span>
+      <span class="fav-toggle" data-emoji="${encodeURIComponent(h.emoji)}" style="font-size:12px;cursor:pointer">${favoritos.includes(h.emoji)?'⭐':'☆'}</span>
     </div>`).join('');
+  grid.onclick = function(ev){
+    const fav = ev.target.closest('.fav-toggle');
+    if(fav){toggleFav(decodeURIComponent(fav.dataset.emoji));return;}
+    const item = ev.target.closest('.hist-item');
+    if(item) cargarHistorial(decodeURIComponent(item.dataset.emoji), item.dataset.anim);
+  };
 }
 function cargarHistorial(emoji,anim){
   selEmoji(emoji);animActual=anim;animarActual();toast('♻️ '+emoji+' cargado');
@@ -995,8 +1007,12 @@ function toggleFav(emoji){
 function renderFavGrid(){
   const grid=document.getElementById('fav-grid');
   if(!favoritos.length){grid.innerHTML='<div style="color:var(--sutil);font-size:12px;font-weight:600">Tocá ⭐ en el historial.</div>';return;}
-  grid.innerHTML=favoritos.map((e,i)=>
-    `<div class="hist-item" onclick="selEmoji(favoritos[${i}]);animarActual()">${e}<span class="hist-lbl">⭐</span></div>`).join('');
+  grid.innerHTML=favoritos.map(e=>
+    `<div class="hist-item" data-emoji="${encodeURIComponent(e)}">${e}<span class="hist-lbl">⭐</span></div>`).join('');
+  grid.onclick = function(ev){
+    const item = ev.target.closest('.hist-item');
+    if(item){selEmoji(decodeURIComponent(item.dataset.emoji));animarActual();}
+  };
 }
 function limpiarHistorial(){
   historial=[];try{localStorage.removeItem('emoji_hist');}catch{}
