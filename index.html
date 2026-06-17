@@ -218,6 +218,17 @@ body.dark .hist-item{background:rgba(28,18,54,0.7);}
 @keyframes neon{0%,100%{filter:drop-shadow(0 0 4px #ff6eb4) drop-shadow(0 0 8px #a78bfa)}50%{filter:drop-shadow(0 0 12px #60d8f3) drop-shadow(0 0 24px #60d8f3) brightness(1.3)}}
 @keyframes popcorn{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(0.8) rotate(-5deg)}40%{transform:scale(1.3) rotate(5deg)}60%{transform:scale(0.9) rotate(-3deg)}80%{transform:scale(1.1) rotate(2deg)}}
 
+/* ⚽ FÚTBOL & ARGENTINA */
+@keyframes golazo{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.5) rotate(-20deg)}30%{transform:scale(0.8) rotate(15deg) translateY(-20px)}50%{transform:scale(1.3) rotate(-10deg) translateY(0)}70%{transform:scale(0.9) rotate(5deg)}85%{transform:scale(1.15) rotate(-3deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes festejo{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-40px) rotate(-15deg) scale(1.2)}40%{transform:translateY(-20px) rotate(15deg) scale(1.1)}60%{transform:translateY(-35px) rotate(-10deg) scale(1.15)}80%{transform:translateY(-10px) rotate(8deg) scale(1.05)}}
+@keyframes penalty{0%,100%{transform:scale(1) translateX(0)}10%{transform:scale(0.95) translateX(-5px)}20%{transform:scale(1.05) translateX(5px)}30%{transform:scale(0.97) translateX(-3px)}40%,60%{transform:scale(1.08) translateX(0)}80%{transform:scale(1.3) translateX(0)}90%{transform:scale(0.85) translateX(0)}}
+@keyframes albiceleste{0%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}25%{filter:hue-rotate(200deg) saturate(3) brightness(1.3);transform:scale(1.15) rotate(5deg)}50%{filter:hue-rotate(0deg) saturate(2) brightness(1.5);transform:scale(0.95)}75%{filter:hue-rotate(200deg) saturate(3) brightness(1.2);transform:scale(1.1) rotate(-5deg)}100%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}}
+
+.anim-golazo{animation:golazo .9s ease-in-out infinite;}
+.anim-festejo{animation:festejo 1.2s ease-in-out infinite;}
+.anim-penalty{animation:penalty 1.5s ease-in-out infinite;}
+.anim-albiceleste{animation:albiceleste 2s ease-in-out infinite;}
+
 .anim-liquidMorph{animation:liquidMorph 3s ease-in-out infinite,elasticPulse 1.5s ease-in-out infinite;}
 .anim-wobble{animation:wobble .8s ease-in-out infinite;}
 .anim-jellyBounce{animation:jellyBounce .7s ease-in-out infinite;}
@@ -392,6 +403,8 @@ const CATS = {
   '💪 Gestos':  ['👍','✌️','🤙','👏','🙌','💪','🤜','👊','✊','🤞','🖖','🤘','👌','🤟','🫶','🤲','🙏','💅','🫵','☝️','🤌','🫰','👋','🤚','🖐️'],
   '🌍 Lugares': ['🏖️','🏔️','🌋','🗼','🏰','🌃','🏝️','🎡','⛩️','🏕️','🌄','🗽','🌉','🌠','🎆','🌅','🏜️','🌿','🏛️','⛲','🎠','🌁','🗺️','🧭','🌐'],
   '🎭 Especial':['💯','🆒','🔞','🆙','🅰️','🆕','🔴','🟡','🟢','🔵','🟣','⚫','⚪','🟤','🔶','🔷','🔸','🔹','💠','🔺','🔻','♾️','🎱','🃏','🎴'],
+  '⚽ Fútbol':  ['⚽','🥅','🏆','🥇','🎽','👟','🧤','🟨','🟥','📣','🎯','💪','🤸','🏃','🧢','🎊','🎉','🥳','😤','😎','🤩','🔥','⚡','💫','✨'],
+  '🇦🇷 Argentina':['🇦🇷','⭐','🏆','💙','🤍','🌟','👑','🦁','⚽','🎽','🙌','💪','🎊','🥇','😤','🤩','🔥','💫','🫶','✌️','👏','🎯','🌈','💎','🦅'],
 };
 
 const ANIMS = [
@@ -417,6 +430,10 @@ const ANIMS = [
   {id:'vortex',      ico:'🌪️',nom:'Vórtex',  desc:'Espiral 3D', dur:1.8, extra:''},
   {id:'neon',        ico:'💡',nom:'Neón',      desc:'Brilla',     dur:1.5, extra:''},
   {id:'popcorn',     ico:'🍿',nom:'Popcorn',   desc:'Salta',      dur:.6,  extra:''},
+  {id:'golazo',      ico:'⚽',nom:'Golazo',    desc:'¡Gol!',      dur:.9,  extra:''},
+  {id:'festejo',     ico:'🎊',nom:'Festejo',   desc:'Celebra',    dur:1.2, extra:''},
+  {id:'penalty',     ico:'🥅',nom:'Penal',     desc:'Tensión',    dur:1.5, extra:''},
+  {id:'albiceleste', ico:'🇦🇷',nom:'Albiceleste',desc:'Argentina',dur:2,   extra:''},
 ];
 
 // Mapa completo de keyframes para export HTML
@@ -444,6 +461,10 @@ const ANIM_KEYFRAMES = {
   vortex:`@keyframes vortexAnim{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(0.5)}100%{transform:rotate(360deg) scale(1)}}`,
   neon:`@keyframes neonAnim{0%,100%{filter:drop-shadow(0 0 4px #ff6eb4) drop-shadow(0 0 8px #a78bfa)}50%{filter:drop-shadow(0 0 12px #60d8f3) drop-shadow(0 0 24px #60d8f3) brightness(1.3)}}`,
   popcorn:`@keyframes popcornAnim{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(0.8) rotate(-5deg)}40%{transform:scale(1.3) rotate(5deg)}60%{transform:scale(0.9) rotate(-3deg)}80%{transform:scale(1.1) rotate(2deg)}}`,
+  golazo:`@keyframes golazoAnim{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.5) rotate(-20deg)}30%{transform:scale(0.8) rotate(15deg) translateY(-20px)}50%{transform:scale(1.3) rotate(-10deg) translateY(0)}70%{transform:scale(0.9) rotate(5deg)}100%{transform:scale(1) rotate(0)}}`,
+  festejo:`@keyframes festejoAnim{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-40px) rotate(-15deg) scale(1.2)}40%{transform:translateY(-20px) rotate(15deg) scale(1.1)}60%{transform:translateY(-35px) rotate(-10deg) scale(1.15)}80%{transform:translateY(-10px) rotate(8deg) scale(1.05)}}`,
+  penalty:`@keyframes penaltyAnim{0%,100%{transform:scale(1) translateX(0)}10%{transform:scale(0.95) translateX(-5px)}20%{transform:scale(1.05) translateX(5px)}40%,60%{transform:scale(1.08) translateX(0)}80%{transform:scale(1.3) translateX(0)}90%{transform:scale(0.85) translateX(0)}}`,
+  albiceleste:`@keyframes albicelesreAnim{0%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}25%{filter:hue-rotate(200deg) saturate(3) brightness(1.3);transform:scale(1.15) rotate(5deg)}50%{filter:hue-rotate(0deg) saturate(2) brightness(1.5);transform:scale(0.95)}75%{filter:hue-rotate(200deg) saturate(3) brightness(1.2);transform:scale(1.1) rotate(-5deg)}100%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}}`,
 };
 
 const EFECTOS_EXTRA = [
@@ -482,6 +503,12 @@ const TEMPLATES = [
   {id:'minimal',       nom:'⬜ Minimal',  desc:'Limpio y simple',
    bg:'#ffffff',
    card:'rgba(240,240,240,0.9)',border:'rgba(0,0,0,0.08)',blur:'none',txt:'#222222'},
+  {id:'argentina',     nom:'🇦🇷 Argentina',desc:'Albiceleste',
+   bg:'linear-gradient(135deg,#75aadb 0%,#ffffff 50%,#75aadb 100%)',
+   card:'rgba(255,255,255,0.30)',border:'rgba(117,170,219,0.6)',blur:'blur(16px)',txt:'#1a3a6e'},
+  {id:'cancha',        nom:'⚽ Cancha',   desc:'Verde estadio',
+   bg:'linear-gradient(160deg,#1a5c1a 0%,#2d8a2d 40%,#1a5c1a 70%,#2d8a2d 100%)',
+   card:'rgba(0,0,0,0.35)',border:'rgba(255,255,255,0.2)',blur:'blur(12px)',txt:'#ffffff'},
 ];
 
 const COLORES_BG = [
@@ -495,9 +522,12 @@ const COLORES_BG = [
   {bg:'linear-gradient(135deg,#10b981,#06b6d4)',lbl:'Mar'},
   {bg:'linear-gradient(135deg,#ec4899,#8b5cf6,#06b6d4)',lbl:'Aurora'},
   {bg:'#ffffff',lbl:'Blanco'},
+  {bg:'linear-gradient(135deg,#75aadb,#ffffff,#75aadb)',lbl:'🇦🇷 Argentina'},
+  {bg:'linear-gradient(135deg,#2d6a27,#4ade80,#2d6a27)',lbl:'⚽ Cancha'},
+  {bg:'linear-gradient(135deg,#1a3a1a,#2d6a27)',lbl:'🌙 Noche Futbol'},
 ];
 
-const PARTICULAS = ['⭐','💫','✨','🎉','❤️','🔥','💎','🌈','💜','💚'];
+const PARTICULAS = ['⭐','💫','✨','🎉','❤️','🔥','💎','🌈','💜','💚','⚽','🏆','🇦🇷','🌟','🎊'];
 const FUENTES = [
   {id:'Nunito,sans-serif',nom:'Nunito'},
   {id:'Georgia,serif',nom:'Georgia'},
