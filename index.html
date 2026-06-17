@@ -1125,16 +1125,16 @@ function interpolarFrame(keyframes, progreso){
 function exportarGIF(){
   if(typeof GIF==='undefined'){ toast('❌ Cargando librería... reintentá'); return; }
   const btn = document.getElementById('btn-gif');
-  btn.textContent='⏳ Generando...'; btn.style.opacity='.6';
+  btn.textContent='⏳ 0%'; btn.style.opacity='.6';
 
-  const size = 300;
+  const size = 160;
   const canvas = document.createElement('canvas');
   canvas.width = size; canvas.height = size;
   const ctx = canvas.getContext('2d');
 
   const gif = new GIF({
-    workers: 2,
-    quality: 8,
+    workers: 1,
+    quality: 15,
     width: size,
     height: size,
     workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js',
@@ -1142,10 +1142,10 @@ function exportarGIF(){
   });
 
   const frames = GIF_FRAMES[animActual] || GIF_FRAMES.float;
-  const totalFrames = 18;
+  const totalFrames = 10;
   const a = ANIMS.find(x=>x.id===animActual);
   const durMs = ((a?a.dur:1)/velocidad)*1000;
-  const delayPerFrame = Math.max(20, Math.round(durMs/totalFrames));
+  const delayPerFrame = Math.max(30, Math.round(durMs/totalFrames));
 
   for(let i=0;i<totalFrames;i++){
     const progreso = i/(totalFrames-1);
@@ -1155,7 +1155,7 @@ function exportarGIF(){
     ctx.fillRect(0,0,size,size);
 
     ctx.save();
-    ctx.translate(size/2 + fr.x, size/2 + fr.y);
+    ctx.translate(size/2 + fr.x*(size/300), size/2 + fr.y*(size/300));
     ctx.rotate(fr.r * Math.PI/180);
     ctx.scale(fr.s, fr.s);
     ctx.font = (size*0.55)+'px "Segoe UI Emoji","Noto Color Emoji",sans-serif';
@@ -1167,9 +1167,24 @@ function exportarGIF(){
     gif.addFrame(ctx, {copy:true, delay: delayPerFrame});
   }
 
+  let timeoutWarn = setTimeout(()=>{
+    toast('⏳ Sigue procesando, un momento más...');
+  }, 6000);
+
+  let failSafe = setTimeout(()=>{
+    btn.textContent='🎬 Exportar GIF'; btn.style.opacity='1';
+    toast('❌ Tardó demasiado, probá de nuevo');
+  }, 20000);
+
+  gif.on('progress', function(p){
+    btn.textContent = '⏳ '+Math.round(p*100)+'%';
+  });
+
   gif.on('finished', function(blob){
+    clearTimeout(timeoutWarn); clearTimeout(failSafe);
     const url = URL.createObjectURL(blob);
     const a2 = document.createElement('a');
+
     a2.href = url; a2.download = 'mundial-'+emojiActual+'-'+animActual+'.gif';
     document.body.appendChild(a2); a2.click(); document.body.removeChild(a2);
     setTimeout(()=>URL.revokeObjectURL(url), 5000);
