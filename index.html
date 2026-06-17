@@ -3,585 +3,698 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>⭐ H™L White · Emoji Studio</title>
+<title>⚽ Mundial Sticker Studio</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
 
 :root{
-  --p1:#ff6eb4;--p2:#a78bfa;--p3:#60d8f3;--p4:#fbbf24;
-  --card:rgba(255,255,255,0.88);--shadow:0 8px 32px rgba(167,139,250,0.18);
-  --radius:24px;--txt:#3a2d5a;--sutil:#9b8cb5;
+  --verde:#16a34a;--verde2:#15803d;--amarillo:#fbbf24;--rojo:#ef4444;
+  --azul:#3b82f6;--blanco:#ffffff;--oscuro:#0a1628;
+  --card:rgba(255,255,255,0.12);--shadow:0 8px 32px rgba(0,0,0,0.3);
+  --radius:20px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{height:100%;}
-body{font-family:'Nunito',sans-serif;min-height:100vh;
-  background:linear-gradient(135deg,#ffe4f3 0%,#ede9fe 35%,#dbeafe 70%,#fef9c3 100%);
-  background-size:400% 400%;animation:bgShift 12s ease infinite;color:var(--txt);overflow-x:hidden;}
-@keyframes bgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:'Nunito',sans-serif;min-height:100vh;
+  background:linear-gradient(160deg,#0a1628 0%,#0d2137 40%,#0a2e1a 100%);
+  color:#fff;overflow-x:hidden;
+}
 
-.header{text-align:center;padding:24px 20px 6px;}
-.header h1{font-size:24px;font-weight:900;
-  background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px;}
-.header p{font-size:11px;color:var(--sutil);margin-top:3px;font-weight:600;}
+/* ── FONDO CANCHA ── */
+.cancha-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 80px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 80px),
+    linear-gradient(160deg,#0a1628 0%,#0d2137 40%,#0a2e1a 100%);
+}
+.cancha-lines{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.cancha-lines::before{
+  content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;
+  background:rgba(255,255,255,0.06);transform:translateX(-50%);
+}
+.cancha-lines::after{
+  content:'';position:absolute;left:50%;top:50%;
+  width:140px;height:140px;border-radius:50%;
+  border:2px solid rgba(255,255,255,0.06);
+  transform:translate(-50%,-50%);
+}
 
-.stage{display:flex;justify-content:center;align-items:center;padding:16px 0 6px;position:relative;min-height:200px;}
-#emoji-wrap{position:relative;width:170px;height:170px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;}
-#halo{position:absolute;inset:-18px;border-radius:50%;
-  background:conic-gradient(from 0deg,var(--p1),var(--p2),var(--p3),var(--p4),var(--p1));
-  animation:spinHalo 4s linear infinite;opacity:0.4;filter:blur(8px);}
+/* ── HEADER ── */
+.header{
+  position:relative;z-index:10;text-align:center;
+  padding:18px 16px 8px;
+  background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,transparent 100%);
+}
+.header-logo{font-size:13px;font-weight:800;letter-spacing:3px;color:var(--amarillo);text-transform:uppercase;margin-bottom:4px;}
+.header h1{
+  font-size:22px;font-weight:900;line-height:1.1;
+  background:linear-gradient(90deg,#fbbf24,#ffffff,#4ade80);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header p{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;font-weight:600;letter-spacing:1px;}
+
+/* ── STAGE ── */
+.stage{
+  position:relative;z-index:10;display:flex;
+  justify-content:center;align-items:center;
+  padding:12px 0 4px;min-height:190px;
+}
+#emoji-wrap{
+  position:relative;width:160px;height:160px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;user-select:none;
+}
+#halo{
+  position:absolute;inset:-20px;border-radius:50%;
+  background:conic-gradient(from 0deg,#fbbf24,#16a34a,#3b82f6,#ef4444,#fbbf24);
+  animation:spinHalo 3s linear infinite;opacity:0.5;filter:blur(10px);
+}
 @keyframes spinHalo{to{transform:rotate(360deg)}}
-#halo2{position:absolute;inset:-6px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,0.92) 55%,rgba(255,110,180,0.15) 100%);
-  box-shadow:0 0 28px rgba(167,139,250,0.28),inset 0 0 18px rgba(255,255,255,0.8);}
-#emoji-display{font-size:96px;line-height:1;position:relative;z-index:2;
-  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.10));}
-.score-badge{position:absolute;top:8px;right:calc(50% - 108px);
-  background:linear-gradient(135deg,var(--p1),var(--p2));color:white;
-  font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;
-  box-shadow:0 2px 8px rgba(167,139,250,0.35);}
+#halo2{
+  position:absolute;inset:-5px;border-radius:50%;
+  background:radial-gradient(circle,rgba(10,22,40,0.9) 55%,transparent 100%);
+  box-shadow:0 0 30px rgba(251,191,36,0.2),inset 0 0 20px rgba(0,0,0,0.5);
+}
+#emoji-display{
+  font-size:90px;line-height:1;position:relative;z-index:2;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+}
+.score-badge{
+  position:absolute;top:6px;right:calc(50% - 110px);
+  background:linear-gradient(135deg,var(--amarillo),#f97316);
+  color:#000;font-size:10px;font-weight:900;
+  padding:4px 10px;border-radius:20px;letter-spacing:.5px;
+}
 
-.tabs{display:flex;gap:5px;padding:0 14px;margin:8px 0 0;overflow-x:auto;scrollbar-width:none;}
+/* ── TABS ── */
+.tabs{
+  position:relative;z-index:10;
+  display:flex;gap:4px;padding:0 12px;margin:6px 0 0;
+  overflow-x:auto;scrollbar-width:none;
+}
 .tabs::-webkit-scrollbar{display:none;}
-.tab{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;
-  cursor:pointer;border:2px solid transparent;background:rgba(255,255,255,0.55);
-  color:var(--sutil);transition:all .18s;font-family:'Nunito',sans-serif;}
-.tab.on{background:white;color:var(--p2);border-color:var(--p2);box-shadow:0 2px 10px rgba(167,139,250,0.22);}
+.tab{
+  flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:800;
+  cursor:pointer;border:2px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);
+  transition:all .18s;font-family:'Nunito',sans-serif;letter-spacing:.3px;
+}
+.tab.on{
+  background:linear-gradient(135deg,var(--amarillo),#f97316);
+  color:#000;border-color:transparent;
+  box-shadow:0 4px 14px rgba(251,191,36,0.4);
+}
 
-.panel{display:none;padding:10px 14px;}
+/* ── PANELS ── */
+.panel{display:none;padding:8px 12px;position:relative;z-index:10;}
 .panel.activo{display:block;}
 
-.card{background:var(--card);border-radius:var(--radius);padding:14px;
-  box-shadow:var(--shadow);backdrop-filter:blur(10px);margin-bottom:10px;
-  border:1.5px solid rgba(255,255,255,0.85);}
-.card-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--p2);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+/* ── CARDS ── */
+.card{
+  background:rgba(255,255,255,0.07);border-radius:var(--radius);padding:12px;
+  margin-bottom:8px;border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(10px);
+}
+.card-title{
+  font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--amarillo);margin-bottom:10px;display:flex;align-items:center;gap:5px;
+}
 
-.emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;}
-.emoji-btn{aspect-ratio:1;border-radius:12px;border:2px solid transparent;
-  background:rgba(255,255,255,0.55);font-size:24px;cursor:pointer;
+/* ── EMOJI GRID ── */
+.emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.emoji-btn{
+  aspect-ratio:1;border-radius:10px;border:2px solid transparent;
+  background:rgba(255,255,255,0.06);font-size:22px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:all .16s cubic-bezier(0.34,1.56,0.64,1);}
-.emoji-btn:active{transform:scale(.86);}
-.emoji-btn.sel{border-color:var(--p1);background:white;
-  box-shadow:0 4px 14px rgba(255,110,180,0.32);transform:scale(1.1);}
-.cat-tabs{display:flex;gap:5px;margin-bottom:9px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+  transition:all .15s cubic-bezier(.34,1.56,.64,1);
+}
+.emoji-btn:active{transform:scale(.82);}
+.emoji-btn.sel{
+  border-color:var(--amarillo);background:rgba(251,191,36,0.15);
+  box-shadow:0 0 12px rgba(251,191,36,0.4);transform:scale(1.12);
+}
+
+/* ── CAT TABS ── */
+.cat-tabs{display:flex;gap:4px;margin-bottom:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
 .cat-tabs::-webkit-scrollbar{display:none;}
-.cat-tab{flex-shrink:0;padding:4px 11px;border-radius:12px;font-size:11px;font-weight:700;
-  cursor:pointer;background:rgba(255,255,255,0.5);border:none;color:var(--sutil);
-  font-family:'Nunito',sans-serif;transition:all .15s;}
-.cat-tab.on{background:var(--p2);color:white;}
+.cat-tab{
+  flex-shrink:0;padding:4px 10px;border-radius:10px;font-size:10px;font-weight:800;
+  cursor:pointer;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.6);font-family:'Nunito',sans-serif;transition:all .15s;
+  white-space:nowrap;
+}
+.cat-tab.on{background:var(--verde);color:#fff;border-color:var(--verde2);}
 
-.anim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
-.anim-btn{padding:9px 6px;border-radius:14px;border:2px solid rgba(167,139,250,0.18);
-  background:rgba(255,255,255,0.55);cursor:pointer;text-align:center;
-  transition:all .16s;font-family:'Nunito',sans-serif;}
-.anim-btn:active{transform:scale(.94);}
-.anim-btn.sel{border-color:var(--p2);background:white;box-shadow:0 4px 14px rgba(167,139,250,0.28);}
-.anim-ico{font-size:22px;margin-bottom:2px;}
-.anim-nom{font-size:10px;font-weight:800;color:var(--txt);}
-.anim-desc{font-size:9px;color:var(--sutil);margin-top:1px;}
+/* ── PAÍSES GRID ── */
+.pais-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.pais-btn{
+  border-radius:12px;border:2px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.06);cursor:pointer;
+  padding:8px 6px;text-align:center;transition:all .16s;
+  font-family:'Nunito',sans-serif;
+}
+.pais-btn:active{transform:scale(.93);}
+.pais-btn.sel{border-color:var(--amarillo);background:rgba(251,191,36,0.12);}
+.pais-flag{font-size:26px;display:block;margin-bottom:2px;}
+.pais-nom{font-size:9px;font-weight:800;color:rgba(255,255,255,0.8);}
 
-.efecto-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
-.efecto-btn{padding:8px 10px;border-radius:14px;border:2px solid rgba(255,110,180,0.2);
-  background:rgba(255,255,255,0.55);cursor:pointer;text-align:left;
-  transition:all .16s;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:8px;}
-.efecto-btn.on{border-color:var(--p1);background:white;box-shadow:0 2px 10px rgba(255,110,180,0.2);}
-.efecto-btn .eico{font-size:18px;}
-.efecto-btn .etxt{font-size:10px;font-weight:700;color:var(--txt);}
+/* ── ANIM GRID ── */
+.anim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.anim-btn{
+  padding:8px 5px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.06);cursor:pointer;text-align:center;
+  transition:all .15s;font-family:'Nunito',sans-serif;
+}
+.anim-btn.sel{border-color:var(--amarillo);background:rgba(251,191,36,0.12);}
+.anim-ico{font-size:20px;margin-bottom:2px;}
+.anim-nom{font-size:9px;font-weight:800;color:#fff;}
+.anim-desc{font-size:8px;color:rgba(255,255,255,0.5);margin-top:1px;}
 
-.btn-row{display:flex;gap:7px;margin-top:4px;}
-.btn-main{flex:1;padding:12px;border-radius:16px;border:none;font-size:13px;font-weight:800;
-  cursor:pointer;transition:all .18s cubic-bezier(0.34,1.56,0.64,1);
-  font-family:'Nunito',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;}
-.btn-main:active{transform:scale(.94);}
-.btn-animar{background:linear-gradient(135deg,var(--p1),var(--p2));color:white;box-shadow:0 4px 14px rgba(255,110,180,0.35);}
-.btn-stop{background:rgba(255,255,255,0.8);color:var(--p2);border:2px solid var(--p2);}
-.btn-random{background:linear-gradient(135deg,var(--p3),var(--p2));color:white;box-shadow:0 4px 14px rgba(96,216,243,0.28);}
-.btn-share{background:linear-gradient(135deg,var(--p4),var(--p1));color:white;box-shadow:0 4px 14px rgba(251,191,36,0.28);}
-.btn-export{background:linear-gradient(135deg,#10b981,#06b6d4);color:white;box-shadow:0 4px 14px rgba(16,185,129,0.3);}
+/* ── BTNS ── */
+.btn-row{display:flex;gap:6px;margin-top:6px;}
+.btn-main{
+  flex:1;padding:12px;border-radius:14px;border:none;font-size:12px;font-weight:800;
+  cursor:pointer;transition:all .18s cubic-bezier(.34,1.56,.64,1);
+  font-family:'Nunito',sans-serif;display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.btn-main:active{transform:scale(.93);}
+.btn-gol{background:linear-gradient(135deg,#fbbf24,#f97316);color:#000;box-shadow:0 4px 14px rgba(251,191,36,0.4);}
+.btn-stop{background:rgba(255,255,255,0.1);color:#fff;border:2px solid rgba(255,255,255,0.2);}
+.btn-verde{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;box-shadow:0 4px 14px rgba(22,163,74,0.4);}
+.btn-rojo{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 4px 14px rgba(239,68,68,0.3);}
+.btn-azul{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(59,130,246,0.3);}
+.btn-export{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,0.35);}
 
-.speed-wrap{display:flex;align-items:center;gap:9px;margin-top:6px;}
-.speed-lbl{font-size:12px;font-weight:700;color:var(--sutil);flex-shrink:0;}
-.speed-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:3px;
-  background:linear-gradient(90deg,var(--p1),var(--p2));outline:none;}
-.speed-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;
-  border-radius:50%;background:white;border:3px solid var(--p2);cursor:pointer;
-  box-shadow:0 2px 8px rgba(167,139,250,0.35);}
-.speed-val{font-size:12px;font-weight:800;color:var(--p2);min-width:30px;text-align:right;}
+/* ── SPEED ── */
+.speed-wrap{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.speed-lbl{font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;}
+.speed-slider{
+  flex:1;-webkit-appearance:none;height:5px;border-radius:3px;
+  background:linear-gradient(90deg,var(--verde),var(--amarillo));outline:none;
+}
+.speed-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--amarillo);border:3px solid #fff;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.speed-val{font-size:12px;font-weight:800;color:var(--amarillo);min-width:32px;text-align:right;}
 
-.color-grid{display:flex;gap:7px;flex-wrap:wrap;}
-.color-btn{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .16s;}
-.color-btn.sel{border-color:var(--txt);transform:scale(1.18);}
+/* ── MENSAJE / EXPORTAR ── */
+.nota-input{
+  width:100%;border:2px solid rgba(255,255,255,0.15);border-radius:12px;
+  padding:10px;font-size:14px;font-family:'Nunito',sans-serif;
+  background:rgba(255,255,255,0.07);color:#fff;resize:none;outline:none;
+  transition:border-color .2s;margin-bottom:8px;
+}
+.nota-input::placeholder{color:rgba(255,255,255,0.3);}
+.nota-input:focus{border-color:var(--amarillo);}
 
-.nota-input{width:100%;border:2px solid rgba(167,139,250,0.22);border-radius:14px;
-  padding:11px;font-size:14px;font-family:'Nunito',sans-serif;
-  background:rgba(255,255,255,0.7);color:var(--txt);resize:none;outline:none;
-  transition:border-color .2s;margin-bottom:9px;}
-.nota-input:focus{border-color:var(--p2);}
-.font-grid{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
-.font-btn{padding:5px 11px;border-radius:10px;border:2px solid transparent;
-  background:rgba(255,255,255,0.55);cursor:pointer;font-size:11px;font-weight:700;
-  color:var(--sutil);transition:all .14s;font-family:'Nunito',sans-serif;}
-.font-btn.sel{border-color:var(--p2);background:white;color:var(--p2);}
+.font-grid{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.font-btn{
+  padding:5px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.07);cursor:pointer;font-size:10px;font-weight:700;
+  color:rgba(255,255,255,0.6);transition:all .14s;font-family:'Nunito',sans-serif;
+}
+.font-btn.sel{border-color:var(--amarillo);background:rgba(251,191,36,0.15);color:var(--amarillo);}
 
-.hist-grid{display:flex;gap:7px;flex-wrap:wrap;}
-.hist-item{background:rgba(255,255,255,0.7);border-radius:12px;padding:7px 10px;
-  font-size:26px;cursor:pointer;border:2px solid transparent;transition:all .16s;
-  display:flex;flex-direction:column;align-items:center;gap:2px;}
-.hist-item:active{transform:scale(.88);}
-.hist-lbl{font-size:9px;color:var(--sutil);font-weight:700;}
-
-.preview-box{border-radius:20px;padding:20px;min-height:160px;
+/* ── PREVIEW ── */
+.preview-box{
+  border-radius:16px;padding:20px;min-height:150px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:10px;margin-bottom:9px;position:relative;overflow:hidden;transition:background .4s;
-  background:linear-gradient(135deg,#ffe4f3,#ede9fe);}
-.preview-emoji{font-size:72px;line-height:1;}
-.preview-txt{font-size:17px;font-weight:700;color:white;text-align:center;
-  text-shadow:0 2px 8px rgba(0,0,0,0.18);word-break:break-word;max-width:240px;}
+  gap:8px;margin-bottom:8px;position:relative;overflow:hidden;
+  border:2px solid rgba(255,255,255,0.1);
+}
+.preview-emoji-big{font-size:64px;line-height:1;}
+.preview-msg{
+  font-size:16px;font-weight:800;text-align:center;
+  word-break:break-word;max-width:260px;line-height:1.3;
+  text-shadow:0 2px 8px rgba(0,0,0,0.5);
+}
+.preview-pais{font-size:28px;position:absolute;top:10px;right:12px;}
 
-.tmpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.tmpl-btn{border-radius:16px;padding:10px;cursor:pointer;border:3px solid transparent;
-  transition:all .18s;font-family:'Nunito',sans-serif;min-height:80px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  position:relative;overflow:hidden;}
-.tmpl-btn.sel{border-color:white;box-shadow:0 0 0 3px var(--p2);}
-.tmpl-btn:active{transform:scale(.94);}
-.tmpl-ico{font-size:24px;}
-.tmpl-nom{font-size:11px;font-weight:800;color:white;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
-.tmpl-desc{font-size:9px;color:rgba(255,255,255,0.8);font-weight:600;}
+/* ── TEMPLATES ── */
+.tmpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px;}
+.tmpl-btn{
+  border-radius:14px;padding:10px;cursor:pointer;border:2px solid transparent;
+  transition:all .18s;font-family:'Nunito',sans-serif;min-height:72px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+}
+.tmpl-btn.sel{border-color:var(--amarillo);box-shadow:0 0 0 2px rgba(251,191,36,0.3);}
+.tmpl-ico{font-size:22px;}
+.tmpl-nom{font-size:10px;font-weight:900;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.5);}
+.tmpl-desc{font-size:8px;color:rgba(255,255,255,0.7);font-weight:600;}
 
-.extra-row{display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
-.tag-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;
-  cursor:pointer;border:2px solid rgba(167,139,250,0.25);background:rgba(255,255,255,0.6);
-  color:var(--sutil);transition:all .15s;font-family:'Nunito',sans-serif;}
-.tag-btn.on{background:linear-gradient(135deg,var(--p1),var(--p2));color:white;border-color:transparent;}
+/* ── COLOR TXT ── */
+.colortxt-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
 
-.particle{position:absolute;border-radius:50%;pointer-events:none;animation:partAnim .9s ease-out forwards;}
+/* ── HISTORIAL ── */
+.hist-grid{display:flex;gap:6px;flex-wrap:wrap;}
+.hist-item{
+  background:rgba(255,255,255,0.07);border-radius:10px;padding:6px 8px;
+  font-size:24px;cursor:pointer;border:2px solid rgba(255,255,255,0.08);
+  transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:1px;
+}
+.hist-item:active{transform:scale(.86);}
+.hist-lbl{font-size:8px;color:rgba(255,255,255,0.4);font-weight:700;}
+
+/* ── PARTICULAS ── */
+.particle{position:absolute;pointer-events:none;animation:partAnim .9s ease-out forwards;}
 @keyframes partAnim{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
-.combo{position:absolute;top:-28px;left:50%;transform:translateX(-50%);
-  font-size:16px;font-weight:900;color:var(--p1);pointer-events:none;
-  animation:comboUp 1s ease-out forwards;white-space:nowrap;z-index:10;}
-@keyframes comboUp{0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-45px) scale(1.4)}}
+.combo{
+  position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  font-size:15px;font-weight:900;color:var(--amarillo);pointer-events:none;
+  animation:comboUp 1s ease-out forwards;white-space:nowrap;z-index:10;
+}
+@keyframes comboUp{0%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-50px) scale(1.5)}}
 
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(70px);
-  background:rgba(58,45,90,0.96);color:white;padding:9px 18px;border-radius:20px;
-  font-size:12px;font-weight:700;z-index:999;
-  transition:transform .28s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;backdrop-filter:blur(10px);}
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(70px);
+  background:rgba(251,191,36,0.95);color:#000;padding:8px 18px;border-radius:20px;
+  font-size:12px;font-weight:900;z-index:999;letter-spacing:.3px;
+  transition:transform .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;
+}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
-.dark-btn{position:fixed;top:12px;right:12px;width:36px;height:36px;border-radius:50%;
-  background:rgba(255,255,255,0.75);border:2px solid rgba(167,139,250,0.28);font-size:16px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  backdrop-filter:blur(8px);z-index:100;transition:all .18s;}
-.dark-btn:active{transform:scale(.88);}
+/* ── DARK BTN ── */
+.top-btns{position:fixed;top:10px;right:10px;display:flex;gap:6px;z-index:100;}
+.icon-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);transition:all .18s;
+}
+.icon-btn:active{transform:scale(.88);}
 
-body.dark{background:linear-gradient(135deg,#1a0a2e,#0f0c29,#1a0a2e);}
-body.dark .card{background:rgba(28,18,54,0.88);border-color:rgba(167,139,250,0.12);}
-body.dark .card-title{color:#c4b5fd;}
-body.dark .tab{background:rgba(28,18,54,0.6);color:#9b8cb5;}
-body.dark .tab.on{background:rgba(167,139,250,0.18);color:#c4b5fd;border-color:#c4b5fd;}
-body.dark .emoji-btn{background:rgba(28,18,54,0.6);}
-body.dark .anim-btn{background:rgba(28,18,54,0.6);border-color:rgba(167,139,250,0.12);}
-body.dark .anim-nom{color:#e2d9f3;}
-body.dark #halo2{background:radial-gradient(circle,rgba(28,18,54,0.92) 55%,rgba(167,139,250,0.18) 100%);}
-body.dark .nota-input{background:rgba(28,18,54,0.7);color:#e2d9f3;border-color:rgba(167,139,250,0.22);}
-body.dark .btn-stop{background:rgba(28,18,54,0.8);}
-body.dark .efecto-btn{background:rgba(28,18,54,0.6);}
-body.dark .tag-btn{background:rgba(28,18,54,0.6);}
-body.dark .tmpl-btn{opacity:.9;}
-body.dark .header h1{-webkit-text-fill-color:transparent;}
-body.dark .hist-item{background:rgba(28,18,54,0.7);}
-
-@keyframes liquidMorph{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}25%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}50%{border-radius:50% 60% 30% 40%/40% 50% 60% 70%}75%{border-radius:40% 30% 70% 60%/70% 40% 50% 30%}}
+/* ── ANIMACIONES FÚTBOL ── */
+@keyframes liquidMorph{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}50%{border-radius:50% 60% 30% 40%/40% 50% 60% 70%}}
 @keyframes elasticPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-@keyframes wobble{0%,100%{transform:rotate(0)}15%{transform:rotate(-12deg)}30%{transform:rotate(10deg)}45%{transform:rotate(-8deg)}60%{transform:rotate(6deg)}75%{transform:rotate(-3deg)}}
-@keyframes jellyBounce{0%,100%{transform:translateY(0) scaleY(1) scaleX(1)}35%{transform:translateY(-30px) scaleY(1.15) scaleX(0.85)}65%{transform:translateY(-12px) scaleY(0.9) scaleX(1.1)}}
-@keyframes rubberBand{0%,100%{transform:scale3d(1,1,1)}30%{transform:scale3d(1.3,0.7,1)}40%{transform:scale3d(0.75,1.3,1)}50%{transform:scale3d(1.15,0.85,1)}70%{transform:scale3d(1.05,0.95,1)}}
-@keyframes swing{20%{transform:rotate(15deg)}40%{transform:rotate(-10deg)}60%{transform:rotate(5deg)}80%{transform:rotate(-5deg)}100%{transform:rotate(0deg)}}
-@keyframes crazyDance{0%,100%{transform:translateX(0) translateY(0) rotate(0deg) scale(1)}25%{transform:translateX(40px) translateY(-40px) rotate(90deg) scale(1.2)}50%{transform:translateX(-40px) translateY(40px) rotate(-180deg) scale(0.8)}75%{transform:translateX(20px) translateY(-20px) rotate(270deg) scale(1.1)}}
-@keyframes floatAround{0%,100%{transform:translateY(0) translateX(0)}25%{transform:translateY(-20px) translateX(10px)}50%{transform:translateY(-10px) translateX(-14px)}75%{transform:translateY(-24px) translateX(5px)}}
-@keyframes spinZoom{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.3)}100%{transform:rotate(360deg) scale(1)}}
-@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.22)}70%{transform:scale(1)}}
-@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-8px)}20%,40%,60%,80%{transform:translateX(8px)}}
-@keyframes flip3d{0%{transform:perspective(400px) rotateY(0)}50%{transform:perspective(400px) rotateY(90deg) scale(1.1)}100%{transform:perspective(400px) rotateY(0deg)}}
-@keyframes tada{0%,100%{transform:scale(1) rotate(0)}10%,20%{transform:scale(0.9) rotate(-3deg)}30%,50%,70%,90%{transform:scale(1.1) rotate(3deg)}40%,60%,80%{transform:scale(1.1) rotate(-3deg)}}
-@keyframes disco{0%{filter:hue-rotate(0deg) saturate(2);transform:scale(1)}25%{filter:hue-rotate(90deg) saturate(3);transform:scale(1.1) rotate(5deg)}50%{filter:hue-rotate(180deg) saturate(2);transform:scale(0.9)}75%{filter:hue-rotate(270deg) saturate(3);transform:scale(1.1) rotate(-5deg)}100%{filter:hue-rotate(360deg) saturate(2);transform:scale(1)}}
-@keyframes orbit{0%{transform:rotate(0deg) translateX(30px) rotate(0deg)}100%{transform:rotate(360deg) translateX(30px) rotate(-360deg)}}
-@keyframes spiral{0%{transform:rotate(0deg) scale(1) translateX(0)}25%{transform:rotate(90deg) scale(1.2) translateX(20px)}50%{transform:rotate(180deg) scale(0.8) translateX(0)}75%{transform:rotate(270deg) scale(1.2) translateX(-20px)}100%{transform:rotate(360deg) scale(1) translateX(0)}}
-@keyframes glitch{0%,100%{transform:translate(0);filter:none}20%{transform:translate(-4px,2px);filter:hue-rotate(90deg)}40%{transform:translate(4px,-2px);filter:hue-rotate(180deg)}60%{transform:translate(-2px,4px);filter:hue-rotate(270deg)}80%{transform:translate(2px,-4px);filter:hue-rotate(360deg)}}
-@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:0.7}}
-@keyframes pendulum{0%,100%{transform:rotate(0deg);transform-origin:top center}25%{transform:rotate(20deg);transform-origin:top center}75%{transform:rotate(-20deg);transform-origin:top center}}
-@keyframes matrix{0%,100%{transform:translateY(0);filter:brightness(1)}25%{transform:translateY(-15px);filter:brightness(1.5) hue-rotate(120deg)}50%{transform:translateY(0);filter:brightness(0.7) hue-rotate(240deg)}75%{transform:translateY(15px);filter:brightness(1.3) hue-rotate(60deg)}}
-@keyframes vortex{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(0.5)}100%{transform:rotate(360deg) scale(1)}}
-@keyframes neon{0%,100%{filter:drop-shadow(0 0 4px #ff6eb4) drop-shadow(0 0 8px #a78bfa)}50%{filter:drop-shadow(0 0 12px #60d8f3) drop-shadow(0 0 24px #60d8f3) brightness(1.3)}}
-@keyframes popcorn{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(0.8) rotate(-5deg)}40%{transform:scale(1.3) rotate(5deg)}60%{transform:scale(0.9) rotate(-3deg)}80%{transform:scale(1.1) rotate(2deg)}}
-
-/* ⚽ FÚTBOL & ARGENTINA */
-@keyframes golazo{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.5) rotate(-20deg)}30%{transform:scale(0.8) rotate(15deg) translateY(-20px)}50%{transform:scale(1.3) rotate(-10deg) translateY(0)}70%{transform:scale(0.9) rotate(5deg)}85%{transform:scale(1.15) rotate(-3deg)}100%{transform:scale(1) rotate(0)}}
-@keyframes festejo{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-40px) rotate(-15deg) scale(1.2)}40%{transform:translateY(-20px) rotate(15deg) scale(1.1)}60%{transform:translateY(-35px) rotate(-10deg) scale(1.15)}80%{transform:translateY(-10px) rotate(8deg) scale(1.05)}}
-@keyframes penalty{0%,100%{transform:scale(1) translateX(0)}10%{transform:scale(0.95) translateX(-5px)}20%{transform:scale(1.05) translateX(5px)}30%{transform:scale(0.97) translateX(-3px)}40%,60%{transform:scale(1.08) translateX(0)}80%{transform:scale(1.3) translateX(0)}90%{transform:scale(0.85) translateX(0)}}
-@keyframes albiceleste{0%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}25%{filter:hue-rotate(200deg) saturate(3) brightness(1.3);transform:scale(1.15) rotate(5deg)}50%{filter:hue-rotate(0deg) saturate(2) brightness(1.5);transform:scale(0.95)}75%{filter:hue-rotate(200deg) saturate(3) brightness(1.2);transform:scale(1.1) rotate(-5deg)}100%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}}
-
-.anim-golazo{animation:golazo .9s ease-in-out infinite;}
-.anim-festejo{animation:festejo 1.2s ease-in-out infinite;}
-.anim-penalty{animation:penalty 1.5s ease-in-out infinite;}
-.anim-albiceleste{animation:albiceleste 2s ease-in-out infinite;}
+@keyframes wobble{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(3deg)}}
+@keyframes jellyBounce{0%,100%{transform:translateY(0) scaleY(1)}40%{transform:translateY(-32px) scaleY(1.15) scaleX(.85)}70%{transform:translateY(-12px) scaleY(.9) scaleX(1.1)}}
+@keyframes golazo{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.6) rotate(-20deg)}35%{transform:scale(.8) rotate(15deg) translateY(-24px)}55%{transform:scale(1.3) rotate(-8deg)}75%{transform:scale(.95) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes festejo{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-45px) rotate(-18deg) scale(1.25)}45%{transform:translateY(-22px) rotate(14deg) scale(1.1)}65%{transform:translateY(-38px) rotate(-10deg) scale(1.18)}85%{transform:translateY(-8px) rotate(6deg) scale(1.05)}}
+@keyframes penalty{0%,100%{transform:scale(1) translateX(0)}15%{transform:scale(.9) translateX(-8px)}30%{transform:scale(1.1) translateX(8px)}50%,70%{transform:scale(1.12) translateX(0)}85%{transform:scale(1.4) translateX(0)}95%{transform:scale(.8)}}
+@keyframes albiceleste{0%,100%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}30%{filter:hue-rotate(200deg) saturate(3) brightness(1.4);transform:scale(1.18) rotate(6deg)}60%{filter:hue-rotate(0deg) saturate(2) brightness(1.6);transform:scale(.93)}80%{filter:hue-rotate(200deg) saturate(3) brightness(1.2);transform:scale(1.12) rotate(-5deg)}}
+@keyframes spinZoom{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.35)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.35)}30%{transform:scale(1)}45%{transform:scale(1.25)}70%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-9px)}30%,60%,90%{transform:translateX(9px)}}
+@keyframes neon{0%,100%{filter:drop-shadow(0 0 4px #fbbf24) drop-shadow(0 0 8px #16a34a)}50%{filter:drop-shadow(0 0 16px #fff) drop-shadow(0 0 28px #fbbf24) brightness(1.4)}}
+@keyframes crazyDance{0%,100%{transform:translate(0,0) rotate(0) scale(1)}25%{transform:translate(38px,-38px) rotate(90deg) scale(1.2)}50%{transform:translate(-38px,38px) rotate(-180deg) scale(.8)}75%{transform:translate(18px,-18px) rotate(270deg) scale(1.1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+@keyframes disco{0%{filter:hue-rotate(0deg) saturate(2)}100%{filter:hue-rotate(360deg) saturate(3)}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.75}}
+@keyframes swing{0%,100%{transform:rotate(0)}25%{transform:rotate(16deg)}75%{transform:rotate(-16deg)}}
+@keyframes popcorn{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(.8) rotate(-5deg)}40%{transform:scale(1.35) rotate(5deg)}60%{transform:scale(.9) rotate(-3deg)}80%{transform:scale(1.12) rotate(2deg)}}
+@keyframes glitch{0%,100%{transform:translate(0);filter:none}20%{transform:translate(-5px,2px);filter:hue-rotate(90deg)}40%{transform:translate(5px,-2px);filter:hue-rotate(180deg)}60%{transform:translate(-2px,5px);filter:hue-rotate(270deg)}80%{transform:translate(3px,-4px);filter:hue-rotate(360deg)}}
+@keyframes campeon{0%,100%{transform:scale(1) rotate(0);filter:brightness(1)}25%{transform:scale(1.3) rotate(-5deg);filter:brightness(1.5) saturate(2)}50%{transform:scale(.9) rotate(5deg);filter:brightness(.8)}75%{transform:scale(1.2) rotate(-3deg);filter:brightness(1.4) saturate(1.8)}}
+@keyframes tiro{0%{transform:scale(1) rotate(0) translateX(0)}30%{transform:scale(.8) rotate(180deg) translateX(20px)}60%{transform:scale(1.4) rotate(360deg) translateX(0)}80%{transform:scale(.95) rotate(380deg)}100%{transform:scale(1) rotate(360deg)}}
 
 .anim-liquidMorph{animation:liquidMorph 3s ease-in-out infinite,elasticPulse 1.5s ease-in-out infinite;}
 .anim-wobble{animation:wobble .8s ease-in-out infinite;}
 .anim-jellyBounce{animation:jellyBounce .7s ease-in-out infinite;}
-.anim-rubberBand{animation:rubberBand .9s ease-in-out infinite;}
-.anim-swing{animation:swing .8s ease-in-out infinite;}
-.anim-crazyDance{animation:crazyDance 2s ease-in-out infinite;}
-.anim-float{animation:floatAround 3s ease-in-out infinite;}
-.anim-spinZoom{animation:spinZoom 1.5s ease-in-out infinite;}
-.anim-heartbeat{animation:heartbeat 1.2s ease-in-out infinite;}
+.anim-golazo{animation:golazo .85s ease-in-out infinite;}
+.anim-festejo{animation:festejo 1.1s ease-in-out infinite;}
+.anim-penalty{animation:penalty 1.4s ease-in-out infinite;}
+.anim-albiceleste{animation:albiceleste 1.8s ease-in-out infinite;}
+.anim-spinZoom{animation:spinZoom 1.4s ease-in-out infinite;}
+.anim-heartbeat{animation:heartbeat 1.1s ease-in-out infinite;}
 .anim-shake{animation:shake .5s ease-in-out infinite;}
-.anim-flip{animation:flip3d 1.2s ease-in-out infinite;}
-.anim-tada{animation:tada 1s ease-in-out infinite;}
+.anim-neon{animation:neon 1.4s ease-in-out infinite;}
+.anim-crazyDance{animation:crazyDance 1.8s ease-in-out infinite;}
+.anim-float{animation:float 2.5s ease-in-out infinite;}
 .anim-disco{animation:disco 1s linear infinite;}
-.anim-orbit{animation:orbit 2s linear infinite;}
-.anim-spiral{animation:spiral 2s ease-in-out infinite;}
-.anim-glitch{animation:glitch .4s ease-in-out infinite;}
 .anim-breathe{animation:breathe 2s ease-in-out infinite;}
-.anim-pendulum{animation:pendulum 1s ease-in-out infinite;}
-.anim-matrix{animation:matrix 1.5s ease-in-out infinite;}
-.anim-vortex{animation:vortex 1.8s ease-in-out infinite;}
-.anim-neon{animation:neon 1.5s ease-in-out infinite;}
+.anim-swing{animation:swing .9s ease-in-out infinite;}
 .anim-popcorn{animation:popcorn .6s ease-in-out infinite;}
+.anim-glitch{animation:glitch .4s ease-in-out infinite;}
+.anim-campeon{animation:campeon 1.2s ease-in-out infinite;}
+.anim-tiro{animation:tiro 1s ease-in-out infinite;}
 
-.efecto-rainbow{animation:disco 3s linear infinite;}
-@keyframes blurTrail{0%,100%{filter:blur(0) brightness(1)}50%{filter:blur(2px) brightness(1.3)}}
-.efecto-blur-trail{animation:blurTrail 1s ease-in-out infinite;}
+.efecto-neon{filter:drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 20px #16a34a);}
+.efecto-rainbow{animation:disco 2s linear infinite;}
+@keyframes blurTrail{0%,100%{filter:blur(0) brightness(1)}50%{filter:blur(2px) brightness(1.4)}}
+.efecto-blur{animation:blurTrail 1s ease-in-out infinite;}
+.efecto-fire{filter:hue-rotate(320deg) saturate(4) brightness(1.2);}
+.efecto-ice{filter:hue-rotate(180deg) saturate(3) brightness(1.2);}
+.efecto-gold{filter:sepia(1) saturate(4) hue-rotate(10deg) brightness(1.1);}
 
-.pb{height:20px;}
+.pb{height:24px;}
 </style>
 </head>
 <body>
-
-<button class="dark-btn" id="dark-btn" onclick="toggleDark()">🌙</button>
+<div class="cancha-bg"></div>
+<div class="cancha-lines"></div>
 <div class="toast" id="toast"></div>
-
-<div class="header">
-  <h1>⭐ H™L White · Emoji Studio</h1>
-  <p>Animá · Personalizá · Exportá con estilo</p>
+<div class="top-btns">
+  <div class="icon-btn" onclick="compartirRapido()" title="Compartir">📤</div>
+  <div class="icon-btn" onclick="emojiRandom()" title="Random">🎲</div>
 </div>
 
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">⚽ Mundial 2026</div>
+  <h1>Sticker Studio</h1>
+  <p>CREÁ · ANIMÁ · COMPARTÍ</p>
+</div>
+
+<!-- STAGE -->
 <div class="stage">
-  <div class="score-badge" id="score-badge">✨ 0 pts</div>
+  <div class="score-badge" id="score-badge">🏆 0 pts</div>
   <div id="emoji-wrap" onclick="clickEmoji()">
     <div id="halo"></div>
     <div id="halo2"></div>
-    <div id="emoji-display">😀</div>
+    <div id="emoji-display">⚽</div>
   </div>
 </div>
 
+<!-- TABS -->
 <div class="tabs">
-  <button class="tab on"  onclick="irTab('emojis',this)">😀 Emojis</button>
+  <button class="tab on"  onclick="irTab('emojis',this)">⚽ Emojis</button>
+  <button class="tab"     onclick="irTab('paises',this)">🌍 Países</button>
   <button class="tab"     onclick="irTab('animaciones',this)">✨ Animar</button>
   <button class="tab"     onclick="irTab('efectos',this)">🎨 Efectos</button>
-  <button class="tab"     onclick="irTab('exportar',this)">💾 Exportar</button>
-  <button class="tab"     onclick="irTab('historial',this)">🕐 Historial</button>
+  <button class="tab"     onclick="irTab('mensaje',this)">💬 Mensaje</button>
+  <button class="tab"     onclick="irTab('historial',this)">🕐 Recientes</button>
 </div>
 
+<!-- ══ EMOJIS ══ -->
 <div class="panel activo" id="panel-emojis">
   <div class="card">
-    <div class="card-title">🐣 Categoría</div>
+    <div class="card-title">📂 Categoría</div>
     <div class="cat-tabs" id="cat-tabs"></div>
     <div class="emoji-grid" id="emoji-grid"></div>
   </div>
   <div class="btn-row">
-    <button class="btn-main btn-random" onclick="emojiRandom()">🎲 Random</button>
-    <button class="btn-main btn-animar" onclick="animarActual()">▶️ Animar</button>
+    <button class="btn-main btn-verde" onclick="emojiRandom()">🎲 Random</button>
+    <button class="btn-main btn-gol"   onclick="animarActual()">▶️ Animar</button>
   </div>
 </div>
 
+<!-- ══ PAÍSES ══ -->
+<div class="panel" id="panel-paises">
+  <div class="card">
+    <div class="card-title">🌍 Seleccioná tu país</div>
+    <div class="pais-grid" id="pais-grid"></div>
+  </div>
+  <div class="card" style="margin-top:2px">
+    <div class="card-title">🎨 Efecto del país</div>
+    <div class="btn-row">
+      <button class="btn-main btn-gol"   onclick="aplicarEfectoPais()">⚡ Aplicar efecto</button>
+      <button class="btn-main btn-verde" onclick="paisRandom()">🎲 Random</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ANIMACIONES ══ -->
 <div class="panel" id="panel-animaciones">
   <div class="card">
     <div class="card-title">⚡ Velocidad</div>
     <div class="speed-wrap">
       <span class="speed-lbl">🐢</span>
       <input type="range" class="speed-slider" id="speed-slider" min="0.2" max="4" step="0.1" value="1" oninput="actualizarVelocidad(this.value)">
-      <span class="speed-lbl">🐇</span>
+      <span class="speed-lbl">🚀</span>
       <span class="speed-val" id="speed-val">1x</span>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">🎬 Efectos de movimiento</div>
+    <div class="card-title">🎬 Movimientos</div>
     <div class="anim-grid" id="anim-grid"></div>
   </div>
   <div class="btn-row">
-    <button class="btn-main btn-animar" onclick="animarActual()">▶️ Animar</button>
-    <button class="btn-main btn-stop"   onclick="detener()">⏹ Stop</button>
-    <button class="btn-main btn-random" onclick="animRandom()">🎲</button>
+    <button class="btn-main btn-gol"   onclick="animarActual()">▶️ Animar</button>
+    <button class="btn-main btn-stop"  onclick="detener()">⏹ Stop</button>
+    <button class="btn-main btn-verde" onclick="animRandom()">🎲</button>
   </div>
 </div>
 
+<!-- ══ EFECTOS ══ -->
 <div class="panel" id="panel-efectos">
   <div class="card">
-    <div class="card-title">🌈 Color de fondo</div>
-    <div class="color-grid" id="color-grid"></div>
+    <div class="card-title">🌈 Fondo</div>
+    <div class="pais-grid" id="fondo-grid"></div>
   </div>
   <div class="card">
     <div class="card-title">📐 Tamaño</div>
     <div class="speed-wrap">
       <span class="speed-lbl">S</span>
-      <input type="range" class="speed-slider" id="size-slider" min="50" max="140" step="5" value="96" oninput="actualizarTamanio(this.value)">
+      <input type="range" class="speed-slider" id="size-slider" min="50" max="130" step="5" value="90" oninput="actualizarTamanio(this.value)">
       <span class="speed-lbl">XL</span>
-      <span class="speed-val" id="size-val">96px</span>
+      <span class="speed-val" id="size-val">90px</span>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">✨ Efectos visuales extra</div>
-    <div class="efecto-grid" id="efecto-grid"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">🔮 Halo y partículas</div>
-    <div class="btn-row">
-      <button class="btn-main btn-stop" onclick="toggleHalo()" id="halo-btn">✨ Halo ON</button>
-      <button class="btn-main btn-random" onclick="colorRandom()">🎲 Color</button>
-    </div>
-    <div style="margin-top:8px">
-      <div class="extra-row" id="particula-sel"></div>
-    </div>
+    <div class="card-title">✨ Efectos visuales</div>
+    <div class="pais-grid" id="efecto-grid"></div>
   </div>
 </div>
 
-<div class="panel" id="panel-exportar">
+<!-- ══ MENSAJE ══ -->
+<div class="panel" id="panel-mensaje">
   <div class="card">
-    <div class="card-title">🖼️ Plantilla de exportación</div>
+    <div class="card-title">🖼️ Plantilla</div>
     <div class="tmpl-grid" id="tmpl-grid"></div>
   </div>
   <div class="card">
-    <div class="card-title">✍️ Mensaje</div>
+    <div class="card-title">💬 Tu mensaje</div>
     <div class="font-grid" id="font-grid"></div>
-    <textarea class="nota-input" id="nota-txt" rows="3" placeholder="Escribí tu mensaje..."></textarea>
-    <div class="extra-row" id="color-txt-row"></div>
+    <textarea class="nota-input" id="nota-txt" rows="3" placeholder="Ej: ¡Vamos Argentina! 🇦🇷⚽🏆"></textarea>
+    <div class="colortxt-row" id="color-txt-row"></div>
   </div>
   <div class="card">
-    <div class="card-title">👁️ Vista previa</div>
+    <div class="card-title">👁️ Preview</div>
     <div class="preview-box" id="preview-box">
-      <div class="preview-emoji" id="preview-emoji">😀</div>
-      <div class="preview-txt" id="preview-txt">Tu mensaje aquí</div>
+      <div class="preview-emoji-big" id="preview-emoji">⚽</div>
+      <div class="preview-msg" id="preview-txt">¡Vamos Argentina! 🇦🇷⚽🏆</div>
+      <div class="preview-pais" id="preview-pais">🇦🇷</div>
     </div>
   </div>
   <div class="btn-row">
-    <button class="btn-main btn-export" onclick="exportarHTML()">💾 Exportar HTML</button>
-    <button class="btn-main btn-share"  onclick="copiarTexto()">📋 Copiar</button>
+    <button class="btn-main btn-export" onclick="exportarHTML()">💾 Exportar</button>
+    <button class="btn-main btn-gol"    onclick="compartirMensaje()">📤 Compartir</button>
   </div>
   <div class="btn-row" style="margin-top:0">
-    <button class="btn-main btn-random" onclick="exportarTarjeta()">🎴 Tarjeta HTML</button>
-    <button class="btn-main btn-stop"   onclick="compartir()">📤 Compartir</button>
+    <button class="btn-main btn-verde" onclick="copiarTexto()">📋 Copiar texto</button>
+    <button class="btn-main btn-azul"  onclick="whatsapp()">💚 WhatsApp</button>
   </div>
 </div>
 
+<!-- ══ HISTORIAL ══ -->
 <div class="panel" id="panel-historial">
   <div class="card">
-    <div class="card-title">🕐 Recientes</div>
-    <div class="hist-grid" id="hist-grid"><div style="color:var(--sutil);font-size:12px;font-weight:600">¡Empezá a animar!</div></div>
+    <div class="card-title">🕐 Usados recientemente</div>
+    <div class="hist-grid" id="hist-grid"><div style="color:rgba(255,255,255,0.3);font-size:12px;font-weight:600">¡Empezá a animar!</div></div>
   </div>
   <div class="card">
     <div class="card-title">⭐ Favoritos</div>
-    <div class="hist-grid" id="fav-grid"><div style="color:var(--sutil);font-size:12px;font-weight:600">Tocá ⭐ en el historial.</div></div>
+    <div class="hist-grid" id="fav-grid"><div style="color:rgba(255,255,255,0.3);font-size:12px;font-weight:600">Tocá ⭐ para guardar.</div></div>
   </div>
   <div class="btn-row">
     <button class="btn-main btn-stop" onclick="limpiarHistorial()">🗑️ Limpiar</button>
-    <button class="btn-main btn-random" onclick="sorteoFavorito()">🎲 Fav random</button>
+    <button class="btn-main btn-gol"  onclick="sorteoFavorito()">🎲 Fav random</button>
   </div>
 </div>
 
 <div class="pb"></div>
 
 <script>
+/* ══════════════════════════════════
+   DATOS
+══════════════════════════════════ */
 const CATS = {
-  '😀 Caras':     ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','🙃','🫠','😉','😊','😇','🥰','😍','🤩','😘','😗','😚','😙','🥲','😋','😛','😜','🤪','😝','🤑','🤗','🫡','🤭','🫢','🫣','🤫','🤔','🫤','😐','😑','😶','🫥','😏','😒','🙄','😬','🤥','🫨','😌','😔','😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵','🥶','🥴','😵','🤯','🤠','🥸','🤡','😈','👿','😤','😠','😡','🤬','😭','😢','😥','😓','🫣','😩','😫','😶‍🌫️','😮‍💨','😤','🥹','🤩','😎','🧐','🤓'],
-  '🐾 Animales':  ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🙈','🙉','🙊','🐔','🐧','🐦','🐤','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋','🐌','🐞','🐜','🦟','🦗','🦂','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🐊','🐅','🐆','🦓','🦍','🦧','🦣','🐘','🦛','🦏','🐪','🐫','🦒','🦘','🦬','🐃','🐂','🦙','🐏','🐑','🦌','🐕','🐩','🦮','🐈','🐓','🦃','🦤','🦚','🦜','🦢','🕊️','🐇','🦝','🦨','🦡','🦫','🦦','🦥','🐁','🐀','🐿️','🦔'],
-  '🌿 Naturaleza':['🌸','🌺','🌻','🌹','🥀','🌷','🌼','💐','🍀','🍁','🍂','🍃','🌿','🪴','🌱','🌾','🌵','🌴','🌳','🌲','🪵','🪨','🌊','🌈','⭐','🌟','💫','✨','☄️','🌙','🌛','🌜','🌝','🌞','🌤️','⛅','🌦️','🌧️','⛈️','🌩️','🌨️','❄️','☃️','⛄','🌬️','💨','🌪️','🌫️','🌈','☀️','🔥','💧','🌊','🌍','🌎','🌏','🗻','🏔️','⛰️','🌋','🏕️','🏖️','🏜️','🏝️','🌅','🌄','🌠','🎇','🎆'],
-  '🍕 Comida':    ['🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🍈','🍑','🥭','🍍','🥥','🥝','🍅','🫒','🥑','🍆','🥔','🥕','🌽','🌶️','🫑','🥒','🥬','🥦','🧄','🧅','🍄','🥜','🫘','🌰','🍞','🥐','🥖','🫓','🥨','🥯','🥞','🧇','🧈','🍳','🥚','🧀','🥓','🥩','🍗','🍖','🦴','🌭','🍔','🍟','🍕','🫔','🌮','🌯','🥙','🧆','🥚','🍜','🍝','🍛','🍣','🍱','🥟','🦪','🍤','🍙','🍚','🍘','🍥','🥮','🍢','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🌰','🥜','🍯','🧃','🥤','🧋','🍵','☕','🫖','🍺','🍻','🥂','🍷','🥃','🍸','🍹','🧉','🍾'],
-  '🚀 Objetos':   ['📱','💻','🖥️','⌨️','🖨️','🖱️','🖲️','💾','💿','📀','📷','📸','📹','🎥','📞','☎️','📺','📻','🧭','⏱️','⏰','🕰️','⌚','📡','🔋','🔌','💡','🔦','🕯️','🪔','🧯','🛢️','💰','💳','💎','🔑','🗝️','🔐','🔒','🔓','🔨','🪓','⛏️','🔧','🪛','🔩','🗜️','⚙️','🔗','⛓️','🪝','🧲','🔬','🔭','🧪','🧫','🧬','🩺','💊','🩹','🩻','🚪','🛋️','🪑','🚽','🚿','🛁','🧴','🧷','🧹','🧺','🧻','🪣','🧼','🫧','🧽','🪤','🧰','🔮','🪄','🎩','🎭','🖼️','🎨','🧵','🪡','🧶','🪢'],
-  '⚽ Deportes':  ['⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🏓','🏸','🏒','🥍','🏑','🏏','🪃','🥅','⛳','🎣','🤿','🎽','🎿','🛷','🥌','🎯','🪀','🪁','🎖️','🏆','🥇','🥈','🥉','🏅','🎗️','🎫','🎟️','🎪','🤸','⛹️','🤺','🏇','⛷️','🏂','🏋️','🤼','🤽','🤾','🤹','🧘','🧗','🚵','🚴','🏊','🏄','🤽','🚣','🧜','🏇','🤼','🤸','🏌️','🏹','🎣','🤿','🧗','🚵','🚴','🏋️','🤺','⛹️','🤾','🤹'],
-  '💪 Gestos':    ['👋','🤚','🖐️','✋','🖖','🫱','🫲','🫳','🫴','👌','🤌','🤏','✌️','🤞','🫰','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','🫵','👍','👎','✊','👊','🤛','🤜','👏','🙌','🫶','👐','🤲','🤝','🙏','✍️','💅','🤳','💪','🦾','🦿','🦵','🦶','👂','🦻','👃','🫀','🫁','🧠','🦷','🦴','👀','👁️','👅','👄','🫦','💋','👣'],
-  '🎮 Actividades':['🎮','🕹️','🎲','🧩','♟️','🎭','🎨','🖌️','🖍️','✏️','📝','📖','📚','🔬','🔭','🎵','🎶','🎸','🎹','🥁','🎷','🎺','🎻','🪕','🪗','🎤','🎧','📻','🎬','🎥','📽️','🎞️','📺','🎟️','🎫','🎪','🤹','🎠','🎡','🎢','🎯','🎳','🎰','🚂','✈️','🚀','🛸','🎁','🎀','🎊','🎉','🎈','🎆','🎇','🧨','🎑','🎃','🎄','🎋','🎍','🎎','🎏','🎐','🧧'],
-  '🌍 Lugares':   ['🏠','🏡','🏢','🏣','🏤','🏥','🏦','🏨','🏩','🏪','🏫','🏬','🏭','🏯','🏰','💒','🗼','🗽','⛪','🕌','🕍','⛩️','🕋','⛲','⛺','🌁','🌃','🌄','🌅','🌆','🌇','🌉','🌌','🎠','🎡','🎢','🌋','🏔️','⛰️','🗻','🏕️','🏖️','🏜️','🏝️','🏞️','🗺️','🌐','🧭','🚂','🚃','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚝','🚞','🚋','🚌','🚍','🚎','🚐','🚑','🚒','🚓','🚔','🚕','🚖','🚗','🚘','🚙','🛻','🚚','🚛','🚜','🏎️','🏍️','🛵','🦽','🦼','🛺','🚲','🛴','🛹','🛼','🚏','🛣️','🛤️','⛽','🛞','🚨','🚥','🚦','🛑'],
-  '❤️ Corazones': ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','❤️‍🩹','💕','💞','💓','💗','💖','💝','💘','💟','☮️','✝️','☪️','🕉️','☯️','✡️','🔯','🕎','☦️','🛐','⛎','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','🆔','⚛️','🉑','☢️','☣️','📴','📳','🈶','🈚','🈸','🈺','🈷️','✴️','🆚','💮','🉐','㊙️','㊗️','🈴','🈵','🈹','🈲','🅰️','🅱️','🆎','🆑','🅾️','🆘','❌','⭕','🛑','⛔','📛','🚫'],
-  '🎭 Especial':  ['💯','🔝','🆒','🆓','🆕','🆙','🆗','🅰️','🅱️','🆎','🆑','🅾️','🆘','🔴','🟠','🟡','🟢','🔵','🟣','🟤','⚫','⚪','🔶','🔷','🔸','🔹','🔺','🔻','💠','🔘','🔳','🔲','▪️','▫️','◾','◽','◼️','◻️','⬛','⬜','🟥','🟧','🟨','🟩','🟦','🟪','🟫','⬛','⬜','🎱','🃏','🀄','🎴','🎰','🎲','♟️','🧩','🪄','🔮','🎭','🎨','🖼️','🎪'],
-  '⚽ Fútbol':    ['⚽','🥅','🏆','🥇','🥈','🥉','🎽','👟','🧤','🟨','🟥','📣','📢','🎯','💪','🤸','🏃','🧢','🎊','🎉','🥳','😤','😎','🤩','🔥','⚡','💫','✨','👑','🦁','💥','🎶','🎵','🏟️','📸','🤜','👊','✊','🙌','👏','🫶','🤝','💪','🦵','👟','🧦','🩱','👕','🩳','🏅','🎖️','🏆','🎗️','🌟','⭐','🌠','💎','🔝','🆙','💯','🎬','📺','🎮','🕹️'],
-  '🇦🇷 Argentina':['🇦🇷','⭐','🌟','🏆','🥇','💙','🤍','👑','🦁','🦅','⚽','🎽','🙌','💪','🎊','🎉','🥳','😤','🤩','🔥','💫','🫶','✌️','👏','🎯','🌈','💎','🌠','🎆','🎇','🧨','📣','📢','🥂','🍾','🎵','🎶','🎸','🎺','🥁','💃','🕺','🤸','🏃','🧢','👟','🏅','🎖️','🎗️','🌻','🌺','🌸','🏖️','🌊','☀️','🌤️','⛅','🌈','🦋','🕊️','🫡','🤜','🏟️'],
+  '⚽ Fútbol':    ['⚽','🥅','🏆','🥇','🥈','🥉','🏅','🎽','👟','🧤','🟨','🟥','📣','📢','🎯','🏃','🧢','🎊','🎉','🥳','😤','😎','🤩','🔥','⚡','💫','✨','👑','💥','🏟️','📸','🤜','👊','✊','🙌','👏','💪','🎶','🎵','🦅'],
+  '😀 Caras':     ['😀','😃','😄','😁','😆','😅','🤣','😂','🥰','😍','🤩','😎','🥳','😜','🤪','😝','🤑','🤗','😤','😠','😡','🤬','😭','😢','😤','😩','😫','🥹','😇','🤠','🥸','😈','👿','🤡','😴','😵','🤯','😱','😨','😰','😥','🫨','🤔','🫡','😏','😒','🙄','😬','🤥','😌','😔'],
+  '🐾 Animales':  ['🐶','🐱','🐼','🦊','🦁','🐯','🐸','🐙','🦋','🐬','🦄','🐲','🐧','🦜','🐺','🦈','🐻','🐨','🦔','🦩','🦚','🦅','🦆','🦉','🦇','🐗','🐴','🐝','🐛','🦟','🦗','🐢','🐍','🦎','🦕','🦑','🦐','🦀','🐡','🐠','🐟','🐳','🐊','🦓','🦍','🐘','🦛','🦘','🐏','🦙'],
+  '🍕 Comida':    ['🍕','🍔','🌮','🍣','🍜','🍩','🎂','🍦','🍓','🥑','🍇','🥝','🍋','🌽','🍄','🧁','🍫','🧃','🥤','🍰','🧇','🥞','🍿','🍱','🫐','🍺','🍻','🥂','🍾','🥩','🍗','🥪','🫔','🧆','🍛','🍝','🍤','🍮','🍭','🍬','🧉','☕','🫖','🍵'],
+  '🚀 Objetos':   ['🚀','⚡','🎸','🎮','🏆','💎','🔮','🎩','🌈','⭐','🌙','☀️','🌊','🔥','💫','🎯','🎪','🎨','🎬','🎻','🥁','🎹','🔭','💡','🧲','📱','💻','🎧','🎤','📷','🔑','💰','🗡️','🛡️','🪄','🧿','🔮','🎱','🃏','🎰','🕹️','🧩','♟️','🎭'],
+  '💪 Gestos':    ['👋','🤚','🖐️','✋','🖖','👌','🤌','🤏','✌️','🤞','🫰','🤟','🤘','🤙','👈','👉','👆','👇','☝️','🫵','👍','👎','✊','👊','🤛','🤜','👏','🙌','🫶','👐','🤲','🙏','💪','🦾','💅','🤳'],
+  '🌿 Naturaleza':['🌸','🌺','🌻','🌹','🌷','🌼','💐','🍀','🍁','🍃','🌿','🌱','🌾','🌵','🌴','🌳','🌲','🌊','🌈','⭐','🌟','💫','✨','☄️','🌙','🌛','🌝','🌞','☀️','⛅','🌧️','❄️','☃️','⛄','🌬️','🔥','💧','🌍','🌎','🌏','🗻','🏔️','🌋','🏕️','🏖️','🌅','🌄','🌠','🎇','🎆'],
+  '❤️ Sentimientos':['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','💕','💞','💓','💗','💖','💝','💘','💟','🥰','😍','🤩','😘','🫶','🙏','✌️','☮️','🌟','⭐','✨','💫','🎊','🎉','🥳','🎈','🎁','🎀','🏆','👑','💎','🌈'],
+  '🌍 Lugares':   ['🏠','🏢','🏥','🏦','🏨','🏩','🏪','🏫','🏬','🏰','💒','🗼','🗽','⛪','🕌','⛩️','⛲','🌁','🌃','🌄','🌅','🌆','🌇','🌉','🌌','🎠','🎡','🎢','🌋','🏔️','🗻','🏕️','🏖️','🏜️','🏝️','🗺️','🌐','🚂','🚄','✈️','🚀','🛸','🚗','🚢','⛵','🏎️'],
 };
 
-const ANIMS = [
-  {id:'liquidMorph',ico:'🫧',nom:'Morph',     desc:'Ondulante',  dur:3,   extra:'elasticPulse 1.5s ease-in-out infinite'},
-  {id:'wobble',      ico:'〰️',nom:'Tambaleo',  desc:'De lado',    dur:.8,  extra:''},
-  {id:'jellyBounce', ico:'🟣',nom:'Gelatina',  desc:'Rebota',     dur:.7,  extra:''},
-  {id:'rubberBand',  ico:'🎯',nom:'Elástico',  desc:'Estira',     dur:.9,  extra:''},
-  {id:'swing',       ico:'🎪',nom:'Columpio',  desc:'Oscila',     dur:.8,  extra:''},
-  {id:'crazyDance',  ico:'🕺',nom:'Baile Loco',desc:'Todo',       dur:2,   extra:''},
-  {id:'float',       ico:'🌊',nom:'Flotar',    desc:'Sube baja',  dur:3,   extra:''},
-  {id:'spinZoom',    ico:'🌀',nom:'Spin Zoom', desc:'Gira crece', dur:1.5, extra:''},
-  {id:'heartbeat',   ico:'💓',nom:'Latido',    desc:'Pulso',      dur:1.2, extra:''},
-  {id:'shake',       ico:'📳',nom:'Vibrar',    desc:'Temblor',    dur:.5,  extra:''},
-  {id:'flip',        ico:'🔄',nom:'Flip 3D',   desc:'Voltea',     dur:1.2, extra:''},
-  {id:'tada',        ico:'🎉',nom:'Tada',      desc:'Celebra',    dur:1,   extra:''},
-  {id:'disco',       ico:'🪩',nom:'Disco',     desc:'Colores',    dur:1,   easing:'linear', extra:''},
-  {id:'orbit',       ico:'🛸',nom:'Órbita',    desc:'Circular',   dur:2,   easing:'linear', extra:''},
-  {id:'spiral',      ico:'🌪️',nom:'Espiral',  desc:'Vórtice',    dur:2,   extra:''},
-  {id:'glitch',      ico:'📺',nom:'Glitch',    desc:'Pixelado',   dur:.4,  extra:''},
-  {id:'breathe',     ico:'💨',nom:'Respirar',  desc:'Latencia',   dur:2,   extra:''},
-  {id:'pendulum',    ico:'⏰',nom:'Péndulo',   desc:'Columpio',   dur:1,   extra:''},
-  {id:'matrix',      ico:'💻',nom:'Matrix',    desc:'Neón',       dur:1.5, extra:''},
-  {id:'vortex',      ico:'🌪️',nom:'Vórtex',  desc:'Espiral 3D', dur:1.8, extra:''},
-  {id:'neon',        ico:'💡',nom:'Neón',      desc:'Brilla',     dur:1.5, extra:''},
-  {id:'popcorn',     ico:'🍿',nom:'Popcorn',   desc:'Salta',      dur:.6,  extra:''},
-  {id:'golazo',      ico:'⚽',nom:'Golazo',    desc:'¡Gol!',      dur:.9,  extra:''},
-  {id:'festejo',     ico:'🎊',nom:'Festejo',   desc:'Celebra',    dur:1.2, extra:''},
-  {id:'penalty',     ico:'🥅',nom:'Penal',     desc:'Tensión',    dur:1.5, extra:''},
-  {id:'albiceleste', ico:'🇦🇷',nom:'Albiceleste',desc:'Argentina',dur:2,   extra:''},
+const PAISES = [
+  {nom:'Argentina',  flag:'🇦🇷', color:'#74ACDF', color2:'#fff',     anim:'albiceleste', efecto:'efecto-gold'},
+  {nom:'Brasil',     flag:'🇧🇷', color:'#009B3A', color2:'#FEDF00',  anim:'festejo',     efecto:'efecto-neon'},
+  {nom:'Francia',    flag:'🇫🇷', color:'#002395', color2:'#ED2939',  anim:'crazyDance',  efecto:'efecto-rainbow'},
+  {nom:'España',     flag:'🇪🇸', color:'#AA151B', color2:'#F1BF00',  anim:'wobble',      efecto:'efecto-fire'},
+  {nom:'Alemania',   flag:'🇩🇪', color:'#000',    color2:'#FFCE00',  anim:'shake',       efecto:'efecto-neon'},
+  {nom:'Inglaterra', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', color:'#012169', color2:'#C8102E',  anim:'heartbeat',   efecto:'efecto-neon'},
+  {nom:'Portugal',   flag:'🇵🇹', color:'#006600', color2:'#FF0000',  anim:'spinZoom',    efecto:'efecto-fire'},
+  {nom:'Italia',     flag:'🇮🇹', color:'#009246', color2:'#CE2B37',  anim:'swing',       efecto:'efecto-neon'},
+  {nom:'Uruguay',    flag:'🇺🇾', color:'#5EB6E4', color2:'#fff',     anim:'festejo',     efecto:'efecto-ice'},
+  {nom:'México',     flag:'🇲🇽', color:'#006847', color2:'#CE1126',  anim:'popcorn',     efecto:'efecto-rainbow'},
+  {nom:'Colombia',   flag:'🇨🇴', color:'#FCD116', color2:'#003087',  anim:'golazo',      efecto:'efecto-neon'},
+  {nom:'EE.UU.',     flag:'🇺🇸', color:'#002868', color2:'#BF0A30',  anim:'crazyDance',  efecto:'efecto-neon'},
+  {nom:'Japón',      flag:'🇯🇵', color:'#BC002D', color2:'#fff',     anim:'breathe',     efecto:'efecto-neon'},
+  {nom:'Marruecos',  flag:'🇲🇦', color:'#C1272D', color2:'#006233',  anim:'festejo',     efecto:'efecto-fire'},
+  {nom:'Holanda',    flag:'🇳🇱', color:'#AE1C28', color2:'#FF6600',  anim:'popcorn',     efecto:'efecto-fire'},
+  {nom:'Croacia',    flag:'🇭🇷', color:'#FF0000', color2:'#fff',     anim:'wobble',      efecto:'efecto-neon'},
+  {nom:'Ecuador',    flag:'🇪🇨', color:'#FFD100', color2:'#003087',  anim:'jellyBounce', efecto:'efecto-gold'},
+  {nom:'Senegal',    flag:'🇸🇳', color:'#00853F', color2:'#FDEF42',  anim:'festejo',     efecto:'efecto-rainbow'},
+  {nom:'Ghana',      flag:'🇬🇭', color:'#006B3F', color2:'#FCD116',  anim:'golazo',      efecto:'efecto-neon'},
+  {nom:'Australia',  flag:'🇦🇺', color:'#00008B', color2:'#FFCC00',  anim:'popcorn',     efecto:'efecto-neon'},
+  {nom:'Corea',      flag:'🇰🇷', color:'#003478', color2:'#CD2E3A',  anim:'tiro',        efecto:'efecto-neon'},
+  {nom:'Qatar',      flag:'🇶🇦', color:'#8D1B3D', color2:'#fff',     anim:'breathe',     efecto:'efecto-neon'},
+  {nom:'Arabia',     flag:'🇸🇦', color:'#006C35', color2:'#fff',     anim:'swing',       efecto:'efecto-neon'},
+  {nom:'Chile',      flag:'🇨🇱', color:'#D52B1E', color2:'#003DA5',  anim:'golazo',      efecto:'efecto-fire'},
 ];
 
-// Mapa completo de keyframes para export HTML
-const ANIM_KEYFRAMES = {
-  liquidMorph:`@keyframes liquidMorphAnim{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}25%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}50%{border-radius:50% 60% 30% 40%/40% 50% 60% 70%}75%{border-radius:40% 30% 70% 60%/70% 40% 50% 30%}}
-@keyframes elasticPulseAnim{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}`,
-  wobble:`@keyframes wobbleAnim{0%,100%{transform:rotate(0)}15%{transform:rotate(-12deg)}30%{transform:rotate(10deg)}45%{transform:rotate(-8deg)}60%{transform:rotate(6deg)}75%{transform:rotate(-3deg)}}`,
-  jellyBounce:`@keyframes jellyBounceAnim{0%,100%{transform:translateY(0) scaleY(1) scaleX(1)}35%{transform:translateY(-30px) scaleY(1.15) scaleX(0.85)}65%{transform:translateY(-12px) scaleY(0.9) scaleX(1.1)}}`,
-  rubberBand:`@keyframes rubberBandAnim{0%,100%{transform:scale3d(1,1,1)}30%{transform:scale3d(1.3,0.7,1)}40%{transform:scale3d(0.75,1.3,1)}50%{transform:scale3d(1.15,0.85,1)}70%{transform:scale3d(1.05,0.95,1)}}`,
-  swing:`@keyframes swingAnim{20%{transform:rotate(15deg)}40%{transform:rotate(-10deg)}60%{transform:rotate(5deg)}80%{transform:rotate(-5deg)}100%{transform:rotate(0deg)}}`,
-  crazyDance:`@keyframes crazyDanceAnim{0%,100%{transform:translateX(0) translateY(0) rotate(0deg) scale(1)}25%{transform:translateX(40px) translateY(-40px) rotate(90deg) scale(1.2)}50%{transform:translateX(-40px) translateY(40px) rotate(-180deg) scale(0.8)}75%{transform:translateX(20px) translateY(-20px) rotate(270deg) scale(1.1)}}`,
-  float:`@keyframes floatAnim{0%,100%{transform:translateY(0) translateX(0)}25%{transform:translateY(-20px) translateX(10px)}50%{transform:translateY(-10px) translateX(-14px)}75%{transform:translateY(-24px) translateX(5px)}}`,
-  spinZoom:`@keyframes spinZoomAnim{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.3)}100%{transform:rotate(360deg) scale(1)}}`,
-  heartbeat:`@keyframes heartbeatAnim{0%,100%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.22)}70%{transform:scale(1)}}`,
-  shake:`@keyframes shakeAnim{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-8px)}20%,40%,60%,80%{transform:translateX(8px)}}`,
-  flip:`@keyframes flipAnim{0%{transform:perspective(400px) rotateY(0)}50%{transform:perspective(400px) rotateY(90deg) scale(1.1)}100%{transform:perspective(400px) rotateY(0deg)}}`,
-  tada:`@keyframes tadaAnim{0%,100%{transform:scale(1) rotate(0)}10%,20%{transform:scale(0.9) rotate(-3deg)}30%,50%,70%,90%{transform:scale(1.1) rotate(3deg)}40%,60%,80%{transform:scale(1.1) rotate(-3deg)}}`,
-  disco:`@keyframes discoAnim{0%{filter:hue-rotate(0deg) saturate(2);transform:scale(1)}25%{filter:hue-rotate(90deg) saturate(3);transform:scale(1.1) rotate(5deg)}50%{filter:hue-rotate(180deg) saturate(2);transform:scale(0.9)}75%{filter:hue-rotate(270deg) saturate(3);transform:scale(1.1) rotate(-5deg)}100%{filter:hue-rotate(360deg) saturate(2);transform:scale(1)}}`,
-  orbit:`@keyframes orbitAnim{0%{transform:rotate(0deg) translateX(30px) rotate(0deg)}100%{transform:rotate(360deg) translateX(30px) rotate(-360deg)}}`,
-  spiral:`@keyframes spiralAnim{0%{transform:rotate(0deg) scale(1) translateX(0)}25%{transform:rotate(90deg) scale(1.2) translateX(20px)}50%{transform:rotate(180deg) scale(0.8) translateX(0)}75%{transform:rotate(270deg) scale(1.2) translateX(-20px)}100%{transform:rotate(360deg) scale(1) translateX(0)}}`,
-  glitch:`@keyframes glitchAnim{0%,100%{transform:translate(0);filter:none}20%{transform:translate(-4px,2px);filter:hue-rotate(90deg)}40%{transform:translate(4px,-2px);filter:hue-rotate(180deg)}60%{transform:translate(-2px,4px);filter:hue-rotate(270deg)}80%{transform:translate(2px,-4px);filter:hue-rotate(360deg)}}`,
-  breathe:`@keyframes breatheAnim{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:0.7}}`,
-  pendulum:`@keyframes pendulumAnim{0%,100%{transform:rotate(0deg)}25%{transform:rotate(20deg)}75%{transform:rotate(-20deg)}}`,
-  matrix:`@keyframes matrixAnim{0%,100%{transform:translateY(0);filter:brightness(1)}25%{transform:translateY(-15px);filter:brightness(1.5) hue-rotate(120deg)}50%{transform:translateY(0);filter:brightness(0.7) hue-rotate(240deg)}75%{transform:translateY(15px);filter:brightness(1.3) hue-rotate(60deg)}}`,
-  vortex:`@keyframes vortexAnim{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(0.5)}100%{transform:rotate(360deg) scale(1)}}`,
-  neon:`@keyframes neonAnim{0%,100%{filter:drop-shadow(0 0 4px #ff6eb4) drop-shadow(0 0 8px #a78bfa)}50%{filter:drop-shadow(0 0 12px #60d8f3) drop-shadow(0 0 24px #60d8f3) brightness(1.3)}}`,
-  popcorn:`@keyframes popcornAnim{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(0.8) rotate(-5deg)}40%{transform:scale(1.3) rotate(5deg)}60%{transform:scale(0.9) rotate(-3deg)}80%{transform:scale(1.1) rotate(2deg)}}`,
-  golazo:`@keyframes golazoAnim{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.5) rotate(-20deg)}30%{transform:scale(0.8) rotate(15deg) translateY(-20px)}50%{transform:scale(1.3) rotate(-10deg) translateY(0)}70%{transform:scale(0.9) rotate(5deg)}100%{transform:scale(1) rotate(0)}}`,
-  festejo:`@keyframes festejoAnim{0%,100%{transform:translateY(0) rotate(0) scale(1)}20%{transform:translateY(-40px) rotate(-15deg) scale(1.2)}40%{transform:translateY(-20px) rotate(15deg) scale(1.1)}60%{transform:translateY(-35px) rotate(-10deg) scale(1.15)}80%{transform:translateY(-10px) rotate(8deg) scale(1.05)}}`,
-  penalty:`@keyframes penaltyAnim{0%,100%{transform:scale(1) translateX(0)}10%{transform:scale(0.95) translateX(-5px)}20%{transform:scale(1.05) translateX(5px)}40%,60%{transform:scale(1.08) translateX(0)}80%{transform:scale(1.3) translateX(0)}90%{transform:scale(0.85) translateX(0)}}`,
-  albiceleste:`@keyframes albicelesreAnim{0%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}25%{filter:hue-rotate(200deg) saturate(3) brightness(1.3);transform:scale(1.15) rotate(5deg)}50%{filter:hue-rotate(0deg) saturate(2) brightness(1.5);transform:scale(0.95)}75%{filter:hue-rotate(200deg) saturate(3) brightness(1.2);transform:scale(1.1) rotate(-5deg)}100%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}}`,
-};
+const FONDOS = [
+  {nom:'🌙 Noche',   bg:'linear-gradient(160deg,#0a1628,#0d2137,#0a2e1a)', ico:'🌙'},
+  {nom:'⚽ Cancha',  bg:'linear-gradient(160deg,#1a5c1a,#2d8a2d,#1a5c1a)', ico:'⚽'},
+  {nom:'🇦🇷 Celeste',bg:'linear-gradient(160deg,#74acdf,#fff,#74acdf)',    ico:'🇦🇷'},
+  {nom:'🔥 Fuego',   bg:'linear-gradient(160deg,#7c1d00,#c2410c,#fbbf24)', ico:'🔥'},
+  {nom:'🏆 Dorado',  bg:'linear-gradient(160deg,#78350f,#b45309,#fbbf24)', ico:'🏆'},
+  {nom:'🌌 Galaxia', bg:'linear-gradient(160deg,#1e1b4b,#312e81,#4c1d95)', ico:'🌌'},
+  {nom:'🇧🇷 Brasil', bg:'linear-gradient(160deg,#003d00,#009B3A,#FEDF00)', ico:'🇧🇷'},
+  {nom:'❄️ Hielo',   bg:'linear-gradient(160deg,#0c2461,#1e3799,#60a3bc)',  ico:'❄️'},
+  {nom:'🌅 Sunset',  bg:'linear-gradient(160deg,#f97316,#fbbf24,#ec4899)', ico:'🌅'},
+];
 
 const EFECTOS_EXTRA = [
-  {id:'rainbow',    ico:'🌈', nom:'Rainbow',    cls:'efecto-rainbow'},
-  {id:'neonGlow',   ico:'💡', nom:'Neón Glow',  css:'filter:drop-shadow(0 0 10px #ff6eb4) drop-shadow(0 0 20px #a78bfa)'},
-  {id:'blur',       ico:'🌫️', nom:'Blur Trail', cls:'efecto-blur-trail'},
-  {id:'inverted',   ico:'🔲', nom:'Invertido',  css:'filter:invert(1) hue-rotate(180deg)'},
-  {id:'sepia',      ico:'📷', nom:'Sepia',      css:'filter:sepia(1) saturate(2)'},
-  {id:'retro',      ico:'📟', nom:'Retro',      css:'filter:contrast(1.4) brightness(.85) saturate(0.5)'},
-  {id:'fire',       ico:'🔥', nom:'Fuego',      css:'filter:hue-rotate(320deg) saturate(3) brightness(1.2)'},
-  {id:'ice',        ico:'🧊', nom:'Hielo',      css:'filter:hue-rotate(180deg) saturate(2) brightness(1.1)'},
+  {id:'neon',    ico:'💡',nom:'Neón',    cls:'efecto-neon'},
+  {id:'rainbow', ico:'🌈',nom:'Rainbow', cls:'efecto-rainbow'},
+  {id:'blur',    ico:'🌫️',nom:'Blur',    cls:'efecto-blur'},
+  {id:'fire',    ico:'🔥',nom:'Fuego',   cls:'efecto-fire'},
+  {id:'ice',     ico:'🧊',nom:'Hielo',   cls:'efecto-ice'},
+  {id:'gold',    ico:'✨',nom:'Dorado',  cls:'efecto-gold'},
 ];
+
+const ANIMS = [
+  {id:'golazo',      ico:'⚽',nom:'Golazo',      desc:'¡Gol!',      dur:.85},
+  {id:'festejo',     ico:'🎊',nom:'Festejo',      desc:'Celebra',    dur:1.1},
+  {id:'penalty',     ico:'🥅',nom:'Penal',        desc:'Tensión',    dur:1.4},
+  {id:'albiceleste', ico:'🇦🇷',nom:'Albiceleste', desc:'Argentina',  dur:1.8},
+  {id:'campeon',     ico:'🏆',nom:'Campeón',      desc:'¡Campeón!',  dur:1.2},
+  {id:'tiro',        ico:'🎯',nom:'Tiro libre',   desc:'Disparo',    dur:1.0},
+  {id:'spinZoom',    ico:'🌀',nom:'Spin',         desc:'Gira',       dur:1.4},
+  {id:'heartbeat',   ico:'💓',nom:'Latido',       desc:'Pulso',      dur:1.1},
+  {id:'shake',       ico:'📳',nom:'Vibrar',       desc:'Temblor',    dur:.5},
+  {id:'wobble',      ico:'〰️',nom:'Tambaleo',     desc:'De lado',    dur:.8},
+  {id:'jellyBounce', ico:'🟢',nom:'Gelatina',     desc:'Rebota',     dur:.7},
+  {id:'neon',        ico:'💡',nom:'Neón',         desc:'Brilla',     dur:1.4},
+  {id:'float',       ico:'🌊',nom:'Flotar',       desc:'Sube baja',  dur:2.5},
+  {id:'disco',       ico:'🪩',nom:'Disco',        desc:'Colores',    dur:1.0, easing:'linear'},
+  {id:'breathe',     ico:'💨',nom:'Respirar',     desc:'Latencia',   dur:2.0},
+  {id:'swing',       ico:'🎪',nom:'Columpio',     desc:'Oscila',     dur:.9},
+  {id:'popcorn',     ico:'🍿',nom:'Popcorn',      desc:'Salta',      dur:.6},
+  {id:'glitch',      ico:'📺',nom:'Glitch',       desc:'Pixelado',   dur:.4},
+  {id:'crazyDance',  ico:'🕺',nom:'Baile Loco',   desc:'Todo',       dur:1.8},
+  {id:'liquidMorph', ico:'🫧',nom:'Morph',        desc:'Ondula',     dur:3.0, extra:'elasticPulse 1.5s ease-in-out infinite'},
+];
+
+const ANIM_KEYFRAMES = {
+  golazo:`@keyframes golazoAnim{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.6) rotate(-20deg)}35%{transform:scale(.8) rotate(15deg) translateY(-24px)}55%{transform:scale(1.3) rotate(-8deg)}100%{transform:scale(1) rotate(0)}}`,
+  festejo:`@keyframes festejoAnim{0%,100%{transform:translateY(0) rotate(0) scale(1)}25%{transform:translateY(-45px) rotate(-18deg) scale(1.25)}55%{transform:translateY(-22px) rotate(14deg) scale(1.1)}80%{transform:translateY(-38px) rotate(-10deg) scale(1.18)}}`,
+  penalty:`@keyframes penaltyAnim{0%,100%{transform:scale(1) translateX(0)}15%{transform:scale(.9) translateX(-8px)}30%{transform:scale(1.1) translateX(8px)}60%{transform:scale(1.12)}85%{transform:scale(1.4)}95%{transform:scale(.8)}}`,
+  albiceleste:`@keyframes albicelesreAnim{0%,100%{filter:hue-rotate(0deg) saturate(1) brightness(1);transform:scale(1)}30%{filter:hue-rotate(200deg) saturate(3) brightness(1.4);transform:scale(1.18) rotate(6deg)}60%{filter:hue-rotate(0deg) saturate(2) brightness(1.6);transform:scale(.93)}80%{filter:hue-rotate(200deg) saturate(3) brightness(1.2);transform:scale(1.12) rotate(-5deg)}}`,
+  campeon:`@keyframes campeonAnim{0%,100%{transform:scale(1) rotate(0);filter:brightness(1)}25%{transform:scale(1.3) rotate(-5deg);filter:brightness(1.5) saturate(2)}50%{transform:scale(.9) rotate(5deg);filter:brightness(.8)}75%{transform:scale(1.2) rotate(-3deg);filter:brightness(1.4) saturate(1.8)}}`,
+  tiro:`@keyframes tiroAnim{0%{transform:scale(1) rotate(0) translateX(0)}30%{transform:scale(.8) rotate(180deg) translateX(20px)}60%{transform:scale(1.4) rotate(360deg) translateX(0)}100%{transform:scale(1) rotate(360deg)}}`,
+  spinZoom:`@keyframes spinZoomAnim{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.35)}100%{transform:rotate(360deg) scale(1)}}`,
+  heartbeat:`@keyframes heartbeatAnim{0%,100%{transform:scale(1)}15%{transform:scale(1.35)}30%{transform:scale(1)}45%{transform:scale(1.25)}70%{transform:scale(1)}}`,
+  shake:`@keyframes shakeAnim{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-9px)}30%,60%,90%{transform:translateX(9px)}}`,
+  wobble:`@keyframes wobbleAnim{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(3deg)}}`,
+  jellyBounce:`@keyframes jellyBounceAnim{0%,100%{transform:translateY(0) scaleY(1)}40%{transform:translateY(-32px) scaleY(1.15) scaleX(.85)}70%{transform:translateY(-12px) scaleY(.9) scaleX(1.1)}}`,
+  neon:`@keyframes neonAnim{0%,100%{filter:drop-shadow(0 0 4px #fbbf24) drop-shadow(0 0 8px #16a34a)}50%{filter:drop-shadow(0 0 16px #fff) drop-shadow(0 0 28px #fbbf24) brightness(1.4)}}`,
+  float:`@keyframes floatAnim{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}`,
+  disco:`@keyframes discoAnim{0%{filter:hue-rotate(0deg) saturate(2)}100%{filter:hue-rotate(360deg) saturate(3)}}`,
+  breathe:`@keyframes breatheAnim{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.75}}`,
+  swing:`@keyframes swingAnim{0%,100%{transform:rotate(0)}25%{transform:rotate(16deg)}75%{transform:rotate(-16deg)}}`,
+  popcorn:`@keyframes popcornAnim{0%,100%{transform:scale(1) rotate(0)}20%{transform:scale(.8) rotate(-5deg)}40%{transform:scale(1.35) rotate(5deg)}60%{transform:scale(.9) rotate(-3deg)}80%{transform:scale(1.12) rotate(2deg)}}`,
+  glitch:`@keyframes glitchAnim{0%,100%{transform:translate(0);filter:none}20%{transform:translate(-5px,2px);filter:hue-rotate(90deg)}40%{transform:translate(5px,-2px);filter:hue-rotate(180deg)}60%{transform:translate(-2px,5px);filter:hue-rotate(270deg)}80%{transform:translate(3px,-4px);filter:hue-rotate(360deg)}}`,
+  crazyDance:`@keyframes crazyDanceAnim{0%,100%{transform:translate(0,0) rotate(0) scale(1)}25%{transform:translate(38px,-38px) rotate(90deg) scale(1.2)}50%{transform:translate(-38px,38px) rotate(-180deg) scale(.8)}75%{transform:translate(18px,-18px) rotate(270deg) scale(1.1)}}`,
+  liquidMorph:`@keyframes liquidMorphAnim{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}50%{border-radius:50% 60% 30% 40%/40% 50% 60% 70%}}\n@keyframes elasticPulseAnim{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}`,
+};
 
 const TEMPLATES = [
-  {id:'glassmorphism', nom:'💎 Glass',    desc:'Vidrio pastel',
-   bg:'linear-gradient(135deg,#ffe4f3,#ede9fe,#dbeafe)',
-   card:'rgba(255,255,255,0.25)',border:'rgba(255,255,255,0.5)',blur:'blur(20px)',txt:'#3a2d5a'},
-  {id:'neon_dark',     nom:'🌆 Neon Dark',desc:'Neón nocturno',
-   bg:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)',
-   card:'rgba(255,255,255,0.05)',border:'rgba(255,110,180,0.4)',blur:'blur(10px)',txt:'#ffffff'},
-  {id:'aurora',        nom:'🌌 Aurora',   desc:'Luces del norte',
-   bg:'linear-gradient(135deg,#43e97b,#38f9d7,#4facfe)',
-   card:'rgba(255,255,255,0.15)',border:'rgba(255,255,255,0.3)',blur:'blur(16px)',txt:'#ffffff'},
-  {id:'sunset',        nom:'🌅 Sunset',   desc:'Atardecer vibrante',
-   bg:'linear-gradient(135deg,#f7971e,#ffd200,#ff6eb4)',
-   card:'rgba(255,255,255,0.2)',border:'rgba(255,255,255,0.4)',blur:'blur(12px)',txt:'#fff'},
-  {id:'ocean',         nom:'🌊 Ocean',    desc:'Profundidades',
-   bg:'linear-gradient(135deg,#0f2027,#203a43,#2c5364)',
-   card:'rgba(255,255,255,0.08)',border:'rgba(96,216,243,0.35)',blur:'blur(14px)',txt:'#e0f7ff'},
-  {id:'candy',         nom:'🍬 Candy',    desc:'Dulce y brillante',
-   bg:'linear-gradient(135deg,#f953c6,#b91d73)',
-   card:'rgba(255,255,255,0.18)',border:'rgba(255,255,255,0.4)',blur:'blur(10px)',txt:'#fff'},
-  {id:'forest',        nom:'🌿 Forest',   desc:'Naturaleza viva',
-   bg:'linear-gradient(135deg,#134e5e,#71b280)',
-   card:'rgba(255,255,255,0.12)',border:'rgba(113,178,128,0.4)',blur:'blur(12px)',txt:'#e8f5e9'},
-  {id:'minimal',       nom:'⬜ Minimal',  desc:'Limpio y simple',
-   bg:'#ffffff',
-   card:'rgba(240,240,240,0.9)',border:'rgba(0,0,0,0.08)',blur:'none',txt:'#222222'},
-  {id:'argentina',     nom:'🇦🇷 Argentina',desc:'Albiceleste',
-   bg:'linear-gradient(135deg,#75aadb 0%,#ffffff 50%,#75aadb 100%)',
-   card:'rgba(255,255,255,0.30)',border:'rgba(117,170,219,0.6)',blur:'blur(16px)',txt:'#1a3a6e'},
-  {id:'cancha',        nom:'⚽ Cancha',   desc:'Verde estadio',
-   bg:'linear-gradient(160deg,#1a5c1a 0%,#2d8a2d 40%,#1a5c1a 70%,#2d8a2d 100%)',
-   card:'rgba(0,0,0,0.35)',border:'rgba(255,255,255,0.2)',blur:'blur(12px)',txt:'#ffffff'},
+  {id:'mundial',  nom:'🏆 Mundial',   desc:'Fondo cancha',
+   bg:'linear-gradient(160deg,#1a5c1a,#2d8a2d,#1a5c1a)',card:'rgba(0,0,0,0.4)',border:'rgba(251,191,36,0.5)',txt:'#fbbf24'},
+  {id:'arg',      nom:'🇦🇷 Argentina',desc:'Albiceleste',
+   bg:'linear-gradient(160deg,#74ACDF,#fff,#74ACDF)',card:'rgba(255,255,255,0.25)',border:'rgba(117,170,219,0.6)',txt:'#003087'},
+  {id:'noche',    nom:'🌙 Noche',     desc:'Oscuro',
+   bg:'linear-gradient(160deg,#0a1628,#0d2137,#0a2e1a)',card:'rgba(255,255,255,0.07)',border:'rgba(251,191,36,0.3)',txt:'#fbbf24'},
+  {id:'fuego',    nom:'🔥 Fuego',     desc:'Intenso',
+   bg:'linear-gradient(160deg,#7c1d00,#c2410c,#fbbf24)',card:'rgba(0,0,0,0.3)',border:'rgba(255,255,255,0.3)',txt:'#fff'},
+  {id:'campeon',  nom:'🥇 Campeón',   desc:'Dorado',
+   bg:'linear-gradient(160deg,#78350f,#b45309,#fbbf24)',card:'rgba(0,0,0,0.35)',border:'rgba(251,191,36,0.6)',txt:'#fff'},
+  {id:'brasil',   nom:'🇧🇷 Brasil',   desc:'Verde amarillo',
+   bg:'linear-gradient(160deg,#003d00,#009B3A,#FEDF00)',card:'rgba(0,0,0,0.3)',border:'rgba(254,223,0,0.5)',txt:'#FEDF00'},
+  {id:'galaxia',  nom:'🌌 Galaxia',   desc:'Espacial',
+   bg:'linear-gradient(160deg,#1e1b4b,#312e81,#4c1d95)',card:'rgba(255,255,255,0.07)',border:'rgba(139,92,246,0.4)',txt:'#c4b5fd'},
+  {id:'minimal',  nom:'⬜ Clean',     desc:'Simple',
+   bg:'#f8fafc',card:'rgba(255,255,255,0.9)',border:'rgba(0,0,0,0.1)',txt:'#0f172a'},
 ];
 
-const COLORES_BG = [
-  {bg:'linear-gradient(135deg,#ffe4f3,#ede9fe)',lbl:'Rosa'},
-  {bg:'linear-gradient(135deg,#dbeafe,#ede9fe)',lbl:'Azul'},
-  {bg:'linear-gradient(135deg,#d1fae5,#dbeafe)',lbl:'Menta'},
-  {bg:'linear-gradient(135deg,#fef9c3,#fde68a)',lbl:'Sol'},
-  {bg:'linear-gradient(135deg,#ff6eb4,#a78bfa)',lbl:'Candy'},
-  {bg:'linear-gradient(135deg,#1a0a2e,#0f0c29)',lbl:'Noche'},
-  {bg:'linear-gradient(135deg,#f97316,#ef4444)',lbl:'Fuego'},
-  {bg:'linear-gradient(135deg,#10b981,#06b6d4)',lbl:'Mar'},
-  {bg:'linear-gradient(135deg,#ec4899,#8b5cf6,#06b6d4)',lbl:'Aurora'},
-  {bg:'#ffffff',lbl:'Blanco'},
-  {bg:'linear-gradient(135deg,#75aadb,#ffffff,#75aadb)',lbl:'🇦🇷 Argentina'},
-  {bg:'linear-gradient(135deg,#2d6a27,#4ade80,#2d6a27)',lbl:'⚽ Cancha'},
-  {bg:'linear-gradient(135deg,#1a3a1a,#2d6a27)',lbl:'🌙 Noche Futbol'},
-];
-
-const PARTICULAS = ['⭐','💫','✨','🎉','❤️','🔥','💎','🌈','💜','💚','⚽','🏆','🇦🇷','🌟','🎊'];
 const FUENTES = [
-  {id:'Nunito,sans-serif',nom:'Nunito'},
-  {id:'Georgia,serif',nom:'Georgia'},
+  {id:'Nunito,sans-serif',    nom:'Nunito'},
+  {id:'Impact,fantasy',       nom:'Impact'},
+  {id:'Georgia,serif',        nom:'Georgia'},
   {id:'Courier New,monospace',nom:'Mono'},
-  {id:'Impact,fantasy',nom:'Impact'},
-  {id:'Brush Script MT,cursive',nom:'Script'},
   {id:'Trebuchet MS,sans-serif',nom:'Trebuchet'},
 ];
-const COLORES_TXT = ['#ffffff','#3a2d5a','#fbbf24','#60d8f3','#ff6eb4','#10b981','#ef4444','#000000'];
+const COLORES_TXT = ['#fbbf24','#ffffff','#4ade80','#60a5fa','#f87171','#000000','#e2e8f0','#c084fc'];
+const PARTICULAS  = ['⚽','🏆','⭐','🎊','🔥','💫','🇦🇷','🥇','✨','🎉','💥','🌟'];
 
-let emojiActual='😀', animActual='liquidMorph', catActual=Object.keys(CATS)[0];
-let velocidad=1, haloVisible=true, efectosActivos=new Set();
-let tmplActual='glassmorphism', fuenteActual='Nunito,sans-serif', colorTxtActual='#ffffff';
-let particulaActual='⭐', historial=[], favoritos=[], puntos=0, clicks=0, oscuro=false;
+/* ══════════════════════════════════
+   ESTADO
+══════════════════════════════════ */
+let emojiActual='⚽', animActual='golazo', catActual='⚽ Fútbol';
+let paisActual=PAISES[0], velocidad=1, fondoActual=FONDOS[0].bg;
+let efectoActivo=null, tmplActual='mundial';
+let fuenteActual='Nunito,sans-serif', colorTxtActual='#fbbf24';
+let particulaActual='⚽', historial=[], favoritos=[], puntos=0, clicks=0;
 
-try{historial=JSON.parse(localStorage.getItem('emoji_hist')||'[]');}catch{}
-try{favoritos=JSON.parse(localStorage.getItem('emoji_favs')||'[]');}catch{}
-try{puntos=parseInt(localStorage.getItem('emoji_pts')||'0');}catch{}
+try{historial=JSON.parse(localStorage.getItem('mw_hist')||'[]');}catch{}
+try{favoritos=JSON.parse(localStorage.getItem('mw_favs')||'[]');}catch{}
+try{puntos=parseInt(localStorage.getItem('mw_pts')||'0');}catch{}
 
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
 function init(){
-  renderCatTabs();renderEmojiGrid();renderAnimGrid();
-  renderColorGrid();renderEfectoGrid();renderTmplGrid();
-  renderFontGrid();renderColorTxtRow();renderParticulaRow();
-  renderHistorial();renderFavGrid();actualizarScore();actualizarPreview();
-  document.getElementById('nota-txt').addEventListener('input',actualizarPreview);
+  renderCatTabs(); renderEmojiGrid(); renderPaisGrid(); renderFondoGrid();
+  renderAnimGrid(); renderEfectoGrid(); renderTmplGrid();
+  renderFontGrid(); renderColorTxtRow();
+  renderHistorial(); renderFavGrid(); actualizarScore(); actualizarPreview();
+  document.getElementById('nota-txt').addEventListener('input', actualizarPreview);
+  aplicarFondo(fondoActual);
 }
 
-function irTab(id,btn){
+/* ══════════════════════════════════
+   TABS
+══════════════════════════════════ */
+function irTab(id, btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('activo'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.getElementById('panel-'+id).classList.add('activo');
   btn.classList.add('on');
-  if(id==='animaciones')renderAnimGrid();
 }
 
+/* ══════════════════════════════════
+   EMOJIS
+══════════════════════════════════ */
 function renderCatTabs(){
-  document.getElementById('cat-tabs').innerHTML=Object.keys(CATS).map((c,i)=>
-    `<button class="cat-tab${i===0?' on':''}" onclick="selCat(${JSON.stringify(c)},this)">${c}</button>`).join('');
+  document.getElementById('cat-tabs').innerHTML = Object.keys(CATS).map((c,i)=>
+    `<button class="cat-tab${i===0?' on':''}" onclick="selCat(${JSON.stringify(c)},this)">${c}</button>`
+  ).join('');
 }
-function selCat(cat,btn){
+function selCat(cat, btn){
   catActual=cat;
   document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('on'));
-  btn.classList.add('on');renderEmojiGrid();
+  btn.classList.add('on'); renderEmojiGrid();
 }
 function renderEmojiGrid(){
   const grid = document.getElementById('emoji-grid');
   grid.innerHTML = CATS[catActual].map(e=>
     `<button class="emoji-btn${e===emojiActual?' sel':''}" data-emoji="${encodeURIComponent(e)}">${e}</button>`
   ).join('');
-  grid.onclick = function(ev){
+  grid.onclick = ev=>{
     const btn = ev.target.closest('.emoji-btn');
     if(btn) selEmoji(decodeURIComponent(btn.dataset.emoji));
   };
@@ -589,451 +702,448 @@ function renderEmojiGrid(){
 function selEmoji(e){
   emojiActual=e;
   document.getElementById('emoji-display').textContent=e;
-  aplicarEfectosActivos();renderEmojiGrid();actualizarPreview();crearParticulas();
+  aplicarEfectoActivo(); renderEmojiGrid(); actualizarPreview(); crearParticulas();
 }
 function emojiRandom(){
   const todas=Object.values(CATS).flat();
-  selEmoji(todas[Math.floor(Math.random()*todas.length)]);animarActual();
+  selEmoji(todas[Math.floor(Math.random()*todas.length)]);
+  animRandom();
 }
 
+/* ══════════════════════════════════
+   PAÍSES
+══════════════════════════════════ */
+function renderPaisGrid(){
+  const grid = document.getElementById('pais-grid');
+  grid.innerHTML = PAISES.map((p,i)=>
+    `<div class="pais-btn${p===paisActual?' sel':''}" data-idx="${i}">
+      <span class="pais-flag">${p.flag}</span>
+      <span class="pais-nom">${p.nom}</span>
+    </div>`
+  ).join('');
+  grid.onclick = ev=>{
+    const btn = ev.target.closest('.pais-btn');
+    if(!btn) return;
+    const idx = parseInt(btn.dataset.idx);
+    paisActual = PAISES[idx];
+    document.querySelectorAll('.pais-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+    toast(paisActual.flag+' '+paisActual.nom+' seleccionado');
+    actualizarPreview();
+  };
+}
+function aplicarEfectoPais(){
+  selEmoji(paisActual.flag);
+  animActual = paisActual.anim;
+  renderAnimGrid();
+  animarActual();
+  efectoActivo = paisActual.efecto;
+  renderEfectoGrid();
+  aplicarEfectoActivo();
+  toast('⚡ Efecto '+paisActual.nom+' aplicado!');
+}
+function paisRandom(){
+  const idx = Math.floor(Math.random()*PAISES.length);
+  paisActual = PAISES[idx];
+  document.querySelectorAll('.pais-btn').forEach((b,i)=>{
+    b.classList.toggle('sel', i===idx);
+  });
+  aplicarEfectoPais();
+}
+
+/* ══════════════════════════════════
+   ANIMACIONES
+══════════════════════════════════ */
 function renderAnimGrid(){
-  document.getElementById('anim-grid').innerHTML=ANIMS.map(a=>
+  document.getElementById('anim-grid').innerHTML = ANIMS.map(a=>
     `<div class="anim-btn${a.id===animActual?' sel':''}" onclick="selAnim('${a.id}',this)">
       <div class="anim-ico">${a.ico}</div>
       <div class="anim-nom">${a.nom}</div>
       <div class="anim-desc">${a.desc}</div>
-    </div>`).join('');
+    </div>`
+  ).join('');
 }
-function selAnim(id,el){
+function selAnim(id, el){
   animActual=id;
   document.querySelectorAll('.anim-btn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');animarActual();
+  el.classList.add('sel'); animarActual();
 }
 function animRandom(){
-  const a=ANIMS[Math.floor(Math.random()*ANIMS.length)];
-  animActual=a.id;renderAnimGrid();animarActual();toast('🎲 '+a.nom);
+  const a = ANIMS[Math.floor(Math.random()*ANIMS.length)];
+  animActual=a.id; renderAnimGrid(); animarActual(); toast('🎲 '+a.nom);
 }
 function animarActual(){
-  const d=document.getElementById('emoji-display');
-  const clsEf=[...d.classList].filter(c=>c.startsWith('efecto-'));
-  d.className='';clsEf.forEach(c=>d.classList.add(c));
+  const d = document.getElementById('emoji-display');
+  const efCls = [...d.classList].filter(c=>c.startsWith('efecto-'));
+  d.className=''; efCls.forEach(c=>d.classList.add(c));
   void d.offsetWidth;
   d.classList.add('anim-'+animActual);
-  const a=ANIMS.find(x=>x.id===animActual);
-  const dur=a?a.dur:1;
-  const easing=a?.easing||'ease-in-out';
-  d.style.animationDuration=(dur/velocidad)+'s';
-  if(a?.extra){
-    // Para animaciones con efecto doble, ajustar la segunda duración también
-    const parts=d.style.animation||'';
-  }
-  aplicarEfectosActivos();
-  guardarHistorial(emojiActual,animActual);agregarPuntos(5);crearParticulas();
+  const a = ANIMS.find(x=>x.id===animActual);
+  const dur = a ? a.dur : 1;
+  d.style.animationDuration = (dur/velocidad)+'s';
+  aplicarEfectoActivo();
+  guardarHistorial(emojiActual, animActual);
+  agregarPuntos(5); crearParticulas();
   toast('▶️ '+a?.nom);
 }
 function detener(){
-  const d=document.getElementById('emoji-display');
-  d.className='';d.style.cssText='';
-  efectosActivos.forEach(id=>{
-    const ef=EFECTOS_EXTRA.find(e=>e.id===id);
-    if(ef?.css)d.style.cssText+=ef.css+';';
-  });
+  const d = document.getElementById('emoji-display');
+  d.className=''; d.style.cssText='';
+  if(efectoActivo){const ef=EFECTOS_EXTRA.find(e=>e.id===efectoActivo);if(ef)d.classList.add(ef.cls);}
   toast('⏹ Detenido');
 }
 function actualizarVelocidad(v){
   velocidad=parseFloat(v);
   document.getElementById('speed-val').textContent=parseFloat(v).toFixed(1)+'x';
   const d=document.getElementById('emoji-display');
-  if([...d.classList].some(c=>c.startsWith('anim-')))animarActual();
+  if([...d.classList].some(c=>c.startsWith('anim-'))) animarActual();
 }
 
+/* ══════════════════════════════════
+   EFECTOS
+══════════════════════════════════ */
+function renderFondoGrid(){
+  const grid = document.getElementById('fondo-grid');
+  grid.innerHTML = FONDOS.map((f,i)=>
+    `<div class="pais-btn${i===0?' sel':''}" data-idx="${i}" style="background:${f.bg}">
+      <span class="pais-flag">${f.ico}</span>
+      <span class="pais-nom">${f.nom}</span>
+    </div>`
+  ).join('');
+  grid.onclick = ev=>{
+    const btn = ev.target.closest('.pais-btn');
+    if(!btn) return;
+    const f = FONDOS[parseInt(btn.dataset.idx)];
+    document.querySelectorAll('#fondo-grid .pais-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+    aplicarFondo(f.bg); toast('🎨 '+f.nom);
+  };
+}
+function aplicarFondo(bg){
+  fondoActual=bg;
+  document.querySelector('.cancha-bg').style.background=bg;
+  document.getElementById('preview-box').style.background=bg;
+}
 function renderEfectoGrid(){
-  document.getElementById('efecto-grid').innerHTML=EFECTOS_EXTRA.map(ef=>
-    `<div class="efecto-btn${efectosActivos.has(ef.id)?' on':''}" onclick="toggleEfecto('${ef.id}',this)">
-      <div class="eico">${ef.ico}</div><div class="etxt">${ef.nom}</div>
-    </div>`).join('');
+  const grid = document.getElementById('efecto-grid');
+  grid.innerHTML = EFECTOS_EXTRA.map((ef,i)=>
+    `<div class="pais-btn${ef.id===efectoActivo?' sel':''}" data-idx="${i}">
+      <span class="pais-flag">${ef.ico}</span>
+      <span class="pais-nom">${ef.nom}</span>
+    </div>`
+  ).join('');
+  grid.onclick = ev=>{
+    const btn = ev.target.closest('.pais-btn');
+    if(!btn) return;
+    const ef = EFECTOS_EXTRA[parseInt(btn.dataset.idx)];
+    if(efectoActivo===ef.id){ efectoActivo=null; }
+    else{ efectoActivo=ef.id; }
+    renderEfectoGrid(); aplicarEfectoActivo();
+    toast((efectoActivo?'✅ ':'❌ ')+ef.nom);
+  };
 }
-function toggleEfecto(id,el){
-  if(efectosActivos.has(id)){efectosActivos.delete(id);el.classList.remove('on');}
-  else{efectosActivos.add(id);el.classList.add('on');}
-  aplicarEfectosActivos();
-}
-function aplicarEfectosActivos(){
-  const d=document.getElementById('emoji-display');
-  const animDur=d.style.animationDuration;
-  [...d.classList].filter(c=>c.startsWith('efecto-')).forEach(c=>d.classList.remove(c));
-  let filterParts=[];
-  efectosActivos.forEach(id=>{
-    const ef=EFECTOS_EXTRA.find(e=>e.id===id);
-    if(!ef)return;
-    if(ef.cls)d.classList.add(ef.cls);
-    if(ef.css){const m=ef.css.match(/filter:([^;]+)/);if(m)filterParts.push(m[1].trim());}
-  });
-  d.style.filter=filterParts.length>0?filterParts.join(' '):'';
-  if(animDur)d.style.animationDuration=animDur;
-}
-
-function renderColorGrid(){
-  document.getElementById('color-grid').innerHTML=COLORES_BG.map((c,i)=>
-    `<div class="color-btn${i===0?' sel':''}" style="background:${c.bg}" onclick="selColor(this,${JSON.stringify(c.bg)},${JSON.stringify(c.lbl)})" title="${c.lbl}"></div>`).join('');
-}
-function selColor(el,bg,lbl){
-  document.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-  document.body.style.background=bg;document.body.style.backgroundSize='400% 400%';
-  document.getElementById('preview-box').style.background=bg;toast('🎨 '+lbl);
-}
-function colorRandom(){
-  const c=COLORES_BG[Math.floor(Math.random()*COLORES_BG.length)];
-  document.body.style.background=c.bg;
-  document.getElementById('preview-box').style.background=c.bg;toast('🎲 '+c.lbl);
+function aplicarEfectoActivo(){
+  const d = document.getElementById('emoji-display');
+  EFECTOS_EXTRA.forEach(ef=>d.classList.remove(ef.cls));
+  if(efectoActivo){
+    const ef = EFECTOS_EXTRA.find(e=>e.id===efectoActivo);
+    if(ef) d.classList.add(ef.cls);
+  }
 }
 function actualizarTamanio(v){
   document.getElementById('emoji-display').style.fontSize=v+'px';
   document.getElementById('size-val').textContent=v+'px';
 }
-function toggleHalo(){
-  haloVisible=!haloVisible;
-  document.getElementById('halo').style.display=haloVisible?'':'none';
-  document.getElementById('halo2').style.display=haloVisible?'':'none';
-  document.getElementById('halo-btn').textContent=haloVisible?'✨ Halo ON':'✨ Halo OFF';
-}
 
-function renderParticulaRow(){
-  const row=document.getElementById('particula-sel');
-  row.innerHTML='<span style="font-size:11px;font-weight:700;color:var(--sutil);margin-right:2px">Partícula:</span>'+
-    PARTICULAS.map(p=>`<span class="tag-btn${p===particulaActual?' on':''}" onclick="selParticula('${p}',this)">${p}</span>`).join('');
-}
-function selParticula(p,el){
-  particulaActual=p;
-  document.querySelectorAll('#particula-sel .tag-btn').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-}
-
+/* ══════════════════════════════════
+   MENSAJE / EXPORT
+══════════════════════════════════ */
 function renderTmplGrid(){
-  document.getElementById('tmpl-grid').innerHTML=TEMPLATES.map(t=>
+  document.getElementById('tmpl-grid').innerHTML = TEMPLATES.map(t=>
     `<div class="tmpl-btn${t.id===tmplActual?' sel':''}" style="background:${t.bg}" onclick="selTmpl('${t.id}',this)">
       <div class="tmpl-ico">${t.nom.split(' ')[0]}</div>
       <div class="tmpl-nom">${t.nom.split(' ').slice(1).join(' ')}</div>
       <div class="tmpl-desc">${t.desc}</div>
-    </div>`).join('');
+    </div>`
+  ).join('');
 }
-function selTmpl(id,el){
+function selTmpl(id, el){
   tmplActual=id;
   document.querySelectorAll('.tmpl-btn').forEach(b=>b.classList.remove('sel'));
   el.classList.add('sel');
-  const t=TEMPLATES.find(x=>x.id===id);
-  if(t){document.getElementById('preview-box').style.background=t.bg;document.getElementById('preview-txt').style.color=t.txt;}
+  const t = TEMPLATES.find(x=>x.id===id);
+  if(t){ document.getElementById('preview-box').style.background=t.bg; aplicarFondo(t.bg); }
   toast('🖼️ '+t?.nom);
 }
-
 function renderFontGrid(){
-  document.getElementById('font-grid').innerHTML=FUENTES.map((f,i)=>
-    `<button class="font-btn${i===0?' sel':''}" style="font-family:${f.id}" onclick="selFuente(${JSON.stringify(f.id)},this)">${f.nom}</button>`).join('');
+  document.getElementById('font-grid').innerHTML = FUENTES.map((f,i)=>
+    `<button class="font-btn${i===0?' sel':''}" style="font-family:${f.id}" onclick="selFuente(${JSON.stringify(f.id)},this)">${f.nom}</button>`
+  ).join('');
 }
-function selFuente(f,btn){
+function selFuente(f, btn){
   fuenteActual=f;
   document.querySelectorAll('.font-btn').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
-  document.getElementById('preview-txt').style.fontFamily=f;actualizarPreview();
+  document.getElementById('preview-txt').style.fontFamily=f; actualizarPreview();
 }
 function renderColorTxtRow(){
-  document.getElementById('color-txt-row').innerHTML=
-    '<span style="font-size:11px;font-weight:700;color:var(--sutil);width:100%;margin-bottom:4px">Color texto:</span>'+
-    COLORES_TXT.map(c=>`<div style="width:26px;height:26px;border-radius:50%;background:${c};border:3px solid ${c===colorTxtActual?'var(--p2)':'transparent'};cursor:pointer;flex-shrink:0" onclick="selColorTxt(${JSON.stringify(c)},this)"></div>`).join('');
+  document.getElementById('color-txt-row').innerHTML =
+    '<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);margin-right:4px">Color:</span>'+
+    COLORES_TXT.map(c=>`<div style="width:24px;height:24px;border-radius:50%;background:${c};border:3px solid ${c===colorTxtActual?'#fbbf24':'transparent'};cursor:pointer;flex-shrink:0" onclick="selColorTxt(${JSON.stringify(c)},this)"></div>`).join('');
 }
-function selColorTxt(c,el){
+function selColorTxt(c){
   colorTxtActual=c;
-  document.getElementById('preview-txt').style.color=c;renderColorTxtRow();actualizarPreview();
+  document.getElementById('preview-txt').style.color=c;
+  renderColorTxtRow(); actualizarPreview();
 }
-
 function actualizarPreview(){
-  const txt=document.getElementById('nota-txt').value||'Tu mensaje aquí';
-  document.getElementById('preview-emoji').textContent=emojiActual;
-  document.getElementById('preview-txt').textContent=txt;
-  document.getElementById('preview-txt').style.fontFamily=fuenteActual;
-  document.getElementById('preview-txt').style.color=colorTxtActual;
+  const txt = document.getElementById('nota-txt').value || '¡Vamos Argentina! 🇦🇷⚽🏆';
+  document.getElementById('preview-emoji').textContent = emojiActual;
+  document.getElementById('preview-pais').textContent  = paisActual.flag;
+  document.getElementById('preview-txt').textContent   = txt;
+  document.getElementById('preview-txt').style.fontFamily = fuenteActual;
+  document.getElementById('preview-txt').style.color = colorTxtActual;
 }
 
-function clickEmoji(){
-  clicks++;agregarPuntos(1);
-  const d=document.getElementById('emoji-display');
-  d.style.transform='scale(1.35)';setTimeout(()=>d.style.transform='',200);
-  crearParticulas();
-  if(clicks%5===0)mostrarCombo('🔥 x'+clicks);
-}
-function mostrarCombo(txt){
-  const wrap=document.getElementById('emoji-wrap');
-  const el=document.createElement('div');
-  el.className='combo';el.textContent=txt;
-  wrap.appendChild(el);setTimeout(()=>el.remove(),1000);
-}
-function crearParticulas(){
-  const wrap=document.getElementById('emoji-wrap');
-  for(let i=0;i<12;i++){
-    const p=document.createElement('div');
-    p.className='particle';p.textContent=particulaActual;
-    p.style.fontSize=Math.random()*10+10+'px';
-    p.style.left='50%';p.style.top='50%';
-    const ang=Math.random()*Math.PI*2,dist=Math.random()*70+28;
-    p.style.setProperty('--tx',Math.cos(ang)*dist+'px');
-    p.style.setProperty('--ty',Math.sin(ang)*dist+'px');
-    p.style.animationDuration=(Math.random()*.4+.5)+'s';
-    wrap.appendChild(p);setTimeout(()=>p.remove(),900);
-  }
-}
-
-// ═══════════════════════════════════════
-// EXPORTAR HTML ANIMADO — CORREGIDO
-// ═══════════════════════════════════════
+/* ══════════════════════════════════
+   EXPORTAR HTML ANIMADO
+══════════════════════════════════ */
 function buildAnimCSS(animId, vel){
-  const a = ANIMS.find(x=>x.id===animId);
-  if(!a) return '';
-  const kf = ANIM_KEYFRAMES[animId] || '';
-  const dur = (a.dur / vel).toFixed(2);
-  const easing = a.easing || 'ease-in-out';
-
-  // Animación principal
-  let animDecl = `${animId}Anim ${dur}s ${easing} infinite`;
-
-  // Animación secundaria si existe (ej: elasticPulse para liquidMorph)
-  if(a.extra){
-    // Reemplazar nombre original por nombre exportado y ajustar duración según velocidad
-    const extraAdapted = a.extra
-      .replace(/([a-zA-Z]+)\s+([\d.]+)s/, (m,name,d)=>`${name}Anim ${(parseFloat(d)/vel).toFixed(2)}s`);
-    animDecl += ', ' + extraAdapted;
-  }
-
-  // Keyframes de la animación extra si aplica
+  const a   = ANIMS.find(x=>x.id===animId);
+  const kf  = ANIM_KEYFRAMES[animId]||'';
+  const dur = ((a?a.dur:1)/vel).toFixed(2);
+  const eas = a?.easing||'ease-in-out';
+  let decl  = `${animId}Anim ${dur}s ${eas} infinite`;
   let extraKF = '';
-  if(animId==='liquidMorph'){
-    extraKF = `@keyframes elasticPulseAnim{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}`;
+  if(a?.extra){
+    const parts = a.extra.match(/([a-zA-Z]+)\s+([\d.]+)s/);
+    if(parts) decl += `, ${parts[1]}Anim ${(parseFloat(parts[2])/vel).toFixed(2)}s ease-in-out infinite`;
   }
-
-  return `${kf}\n${extraKF}\n.emoji{ animation: ${animDecl}; }`;
+  return `${kf}\n${extraKF}\n.emoji{ animation: ${decl}; }`;
 }
-
-function buildEfectosCSS(){
-  let css='';
-  efectosActivos.forEach(id=>{
-    const ef=EFECTOS_EXTRA.find(e=>e.id===id);
-    if(ef?.css) css+=`.emoji{ ${ef.css} }\n`;
-    if(ef?.cls==='efecto-rainbow') css+=`@keyframes discoRainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}\n.emoji{ animation-name: discoRainbow; }\n`;
-  });
-  return css;
-}
-
 function generarHTML(){
-  const txt = document.getElementById('nota-txt').value||'';
+  const txt  = document.getElementById('nota-txt').value||'';
   const tmpl = TEMPLATES.find(t=>t.id===tmplActual)||TEMPLATES[0];
   const animCSS = buildAnimCSS(animActual, velocidad);
-  const efCSS = buildEfectosCSS();
-  const emoji = emojiActual;
+  const efCSS   = efectoActivo ? `.emoji{ ${EFECTOS_EXTRA.find(e=>e.id===efectoActivo)?.cls ? '' : ''} }` : '';
+  const efClass = efectoActivo ? (EFECTOS_EXTRA.find(e=>e.id===efectoActivo)?.cls||'') : '';
 
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${emoji} ${txt.slice(0,40)||'Emoji Studio'}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${emojiActual} ${txt.slice(0,40)||'Mundial 2026'}</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
-body{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:${tmpl.bg};background-size:400% 400%;
-  animation:bgAnim 10s ease infinite;font-family:'Nunito',sans-serif;
-}
+  animation:bgAnim 10s ease infinite;font-family:'Nunito',sans-serif;}
 @keyframes bgAnim{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.card{
-  background:${tmpl.card};border:1px solid ${tmpl.border};
-  backdrop-filter:${tmpl.blur};border-radius:32px;
-  padding:40px 32px;text-align:center;
-  box-shadow:0 16px 48px rgba(0,0,0,0.2);max-width:400px;width:90%;
-}
-.halo-wrap{
-  position:relative;width:180px;height:180px;margin:0 auto 24px;
-  display:flex;align-items:center;justify-content:center;
-}
-.halo{
-  position:absolute;inset:-16px;border-radius:50%;
-  background:conic-gradient(from 0deg,#ff6eb4,#a78bfa,#60d8f3,#fbbf24,#ff6eb4);
-  animation:spinHalo 4s linear infinite;opacity:0.45;filter:blur(8px);
-}
-.halo2{
-  position:absolute;inset:-4px;border-radius:50%;
-  background:radial-gradient(circle,${tmpl.card} 55%,transparent 100%);
-}
+.card{background:${tmpl.card};border:1px solid ${tmpl.border};backdrop-filter:blur(16px);
+  border-radius:28px;padding:36px 28px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);max-width:380px;width:90%;position:relative;}
+.halo-wrap{position:relative;width:160px;height:160px;margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:center;}
+.halo{position:absolute;inset:-18px;border-radius:50%;
+  background:conic-gradient(from 0deg,#fbbf24,#16a34a,#3b82f6,#ef4444,#fbbf24);
+  animation:spinHalo 3s linear infinite;opacity:.5;filter:blur(10px);}
+.halo2{position:absolute;inset:-4px;border-radius:50%;
+  background:radial-gradient(circle,${tmpl.card} 55%,transparent 100%);}
 @keyframes spinHalo{to{transform:rotate(360deg)}}
-.emoji{font-size:100px;line-height:1;position:relative;z-index:2;display:inline-block;}
-.msg{
-  font-size:22px;font-weight:700;color:${colorTxtActual};
-  line-height:1.5;font-family:${fuenteActual};margin-bottom:16px;
-  ${colorTxtActual==='#ffffff'?'text-shadow:0 2px 8px rgba(0,0,0,0.3);':''}
-}
-.footer{font-size:12px;color:${tmpl.txt==='#ffffff'?'rgba(255,255,255,0.6)':'rgba(0,0,0,0.4)'};font-weight:600;}
-
-/* ── ANIMACIÓN CORREGIDA ── */
+.emoji{font-size:96px;line-height:1;position:relative;z-index:2;display:inline-block;}
+.pais{font-size:36px;position:absolute;top:12px;right:14px;}
+.msg{font-size:20px;font-weight:800;color:${colorTxtActual};line-height:1.4;
+  font-family:${fuenteActual};margin-bottom:14px;
+  text-shadow:0 2px 8px rgba(0,0,0,0.4);}
+.footer{font-size:11px;color:rgba(255,255,255,0.5);font-weight:700;letter-spacing:1px;}
 ${animCSS}
-${efCSS}
-
-/* CONFETTI */
+.efecto-neon{filter:drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 20px #16a34a);}
+.efecto-rainbow{animation:discoRainbow 2s linear infinite;}
+@keyframes discoRainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
+.efecto-fire{filter:hue-rotate(320deg) saturate(4) brightness(1.2);}
+.efecto-ice{filter:hue-rotate(180deg) saturate(3) brightness(1.2);}
+.efecto-gold{filter:sepia(1) saturate(4) hue-rotate(10deg) brightness(1.1);}
 @keyframes confettiDrop{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--cx),120px) rotate(var(--cr));opacity:0}}
-.cp{position:fixed;top:-10px;width:8px;height:8px;border-radius:2px;animation:confettiDrop 2s ease-in forwards;}
+.cp{position:fixed;top:-10px;width:10px;height:10px;border-radius:2px;animation:confettiDrop 2s ease-in forwards;}
 </style>
 </head>
 <body>
 <div class="card">
+  <div class="pais">${paisActual.flag}</div>
   <div class="halo-wrap">
     <div class="halo"></div>
     <div class="halo2"></div>
-    <span class="emoji" id="main-emoji">${emoji}</span>
+    <span class="emoji ${efClass}" id="main-emoji">${emojiActual}</span>
   </div>
   ${txt?`<div class="msg">${txt.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`:''}
-  <div class="footer">⭐ Creado con H™L White · Emoji Studio</div>
+  <div class="footer">⚽ Mundial 2026 · Sticker Studio</div>
 </div>
 <script>
-const colores=['#ff6eb4','#a78bfa','#60d8f3','#fbbf24','#10b981','#ef4444'];
+const cols=['#fbbf24','#16a34a','#3b82f6','#ef4444','#fff','#f97316'];
 function confetti(){
-  for(let i=0;i<30;i++){
+  for(let i=0;i<40;i++){
     setTimeout(()=>{
       const c=document.createElement('div');c.className='cp';
       c.style.left=Math.random()*100+'vw';
-      c.style.background=colores[Math.floor(Math.random()*colores.length)];
-      c.style.setProperty('--cx',(Math.random()*120-60)+'px');
+      c.style.background=cols[Math.floor(Math.random()*cols.length)];
+      c.style.setProperty('--cx',(Math.random()*140-70)+'px');
       c.style.setProperty('--cr',(Math.random()*720-360)+'deg');
       c.style.animationDuration=(Math.random()+1.5)+'s';
       document.body.appendChild(c);setTimeout(()=>c.remove(),2500);
-    },i*80);
+    },i*70);
   }
 }
-window.addEventListener('load',()=>{confetti();setTimeout(confetti,3000);});
+window.addEventListener('load',()=>{confetti();setTimeout(confetti,3500);});
 document.getElementById('main-emoji').addEventListener('click',confetti);
 <\/script>
 </body>
 </html>`;
 }
-
 function exportarHTML(){
   const html = generarHTML();
   try{
     const uri='data:text/html;charset=utf-8,'+encodeURIComponent(html);
     const a=document.createElement('a');a.href=uri;
-    a.download='emoji-'+emojiActual+'-'+tmplActual+'.html';
+    a.download='mundial-'+emojiActual+'.html';
     document.body.appendChild(a);a.click();document.body.removeChild(a);
-    agregarPuntos(10);toast('💾 ¡Exportado! Revisá Descargas');
+    agregarPuntos(10); toast('💾 ¡Exportado! Revisá Descargas');
   }catch(e){
     const w=window.open('','_blank');
-    if(w){w.document.write(generarHTML());w.document.close();toast('💾 Guardá con el menú del navegador');}
-    else mostrarModalHTML(html);
+    if(w){w.document.write(html);w.document.close();toast('💾 Abrí y guardá desde el navegador');}
+    else mostrarModal(html);
   }
 }
-
-// ═══════════════════════════════════════
-// TARJETA HTML ANIMADA — REEMPLAZA PNG
-// Exporta la tarjeta como HTML con el emoji animado real
-// ═══════════════════════════════════════
-function exportarTarjeta(){
-  const html = generarHTML(); // Reutiliza el mismo HTML animado
-  try{
-    const uri='data:text/html;charset=utf-8,'+encodeURIComponent(html);
-    const a=document.createElement('a');a.href=uri;
-    a.download='tarjeta-'+emojiActual+'.html';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    agregarPuntos(8);toast('🎴 Tarjeta animada en Descargas');
-  }catch(e){
-    const w=window.open('','_blank');
-    if(w){w.document.write(html);w.document.close();toast('🎴 Tarjeta abierta — guardá con menú');}
-    else mostrarModalHTML(html);
-  }
+function mostrarModal(html){
+  const m=document.createElement('div');
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;flex-direction:column;padding:16px;gap:10px;';
+  m.innerHTML=`<div style="color:#fbbf24;font-size:15px;font-weight:900;text-align:center">💾 Copiá el código HTML</div>
+  <textarea style="flex:1;border-radius:10px;padding:10px;font-size:9px;font-family:monospace;background:#0a1628;color:#4ade80;border:none;resize:none" readonly id="mc">${html.replace(/</g,'&lt;')}</textarea>
+  <div style="display:flex;gap:8px">
+    <button onclick="navigator.clipboard.writeText(document.getElementById('mc2').value).then(()=>this.textContent='✅ ¡Copiado!')" style="flex:1;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#fbbf24,#f97316);color:#000;font-size:13px;font-weight:900;cursor:pointer">📋 Copiar código</button>
+    <button onclick="this.parentElement.parentElement.remove()" style="padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:13px;font-weight:900;cursor:pointer">✕</button>
+  </div>
+  <textarea id="mc2" style="position:absolute;opacity:0;pointer-events:none">${html}</textarea>`;
+  document.body.appendChild(m);
 }
-
-function mostrarModalHTML(html){
-  const modal=document.createElement('div');
-  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;padding:20px;gap:12px;';
-  modal.innerHTML=`
-    <div style="color:white;font-size:16px;font-weight:800;text-align:center;font-family:Nunito,sans-serif">💾 Copiá el código HTML</div>
-    <div style="color:rgba(255,255,255,0.7);font-size:12px;text-align:center">Pegalo en un archivo .html y abrilo en el navegador</div>
-    <textarea id="modal-code" style="flex:1;border-radius:12px;padding:12px;font-size:10px;font-family:monospace;border:none;resize:none;background:#1a1a2e;color:#a78bfa;" readonly>${html.replace(/</g,'&lt;')}</textarea>
-    <div style="display:flex;gap:10px">
-      <button onclick="navigator.clipboard.writeText(document.getElementById('modalRaw').value).then(()=>this.textContent='✅ ¡Copiado!').catch(()=>{})" style="flex:1;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#ff6eb4,#a78bfa);color:white;font-size:14px;font-weight:800;cursor:pointer">📋 Copiar código</button>
-      <button onclick="this.closest('div[style]').remove()" style="padding:14px 20px;border-radius:14px;border:2px solid rgba(255,255,255,0.3);background:transparent;color:white;font-size:14px;font-weight:800;cursor:pointer">✕</button>
-    </div>
-    <textarea id="modalRaw" style="position:absolute;opacity:0;pointer-events:none">${html}</textarea>`;
-  document.body.appendChild(modal);
-}
-
-function compartir(){
-  const txt=document.getElementById('nota-txt').value||'';
-  const data={title:'H™L White · Emoji Studio',text:emojiActual+' '+txt,url:window.location.href};
-  if(navigator.share)navigator.share(data).then(()=>toast('📤 Compartido!')).catch(()=>copiarTexto());
+function compartirMensaje(){
+  const txt = document.getElementById('nota-txt').value||'';
+  const data = {title:'⚽ Mundial 2026 · Sticker Studio', text:emojiActual+' '+paisActual.flag+' '+txt, url:window.location.href};
+  if(navigator.share) navigator.share(data).then(()=>toast('📤 Compartido!')).catch(()=>copiarTexto());
   else copiarTexto();
 }
+function compartirRapido(){compartirMensaje();}
 function copiarTexto(){
-  const txt=emojiActual+' '+(document.getElementById('nota-txt').value||'');
+  const txt = emojiActual+' '+paisActual.flag+' '+(document.getElementById('nota-txt').value||'⚽ Mundial 2026!');
   navigator.clipboard?.writeText(txt).then(()=>toast('📋 Copiado!')).catch(()=>toast('❌ No disponible'));
 }
+function whatsapp(){
+  const txt = encodeURIComponent(emojiActual+' '+paisActual.flag+' '+(document.getElementById('nota-txt').value||'⚽ ¡Vamos!'));
+  window.open('https://wa.me/?text='+txt,'_blank');
+  toast('💚 Abriendo WhatsApp...');
+}
 
-function guardarHistorial(emoji,anim){
+/* ══════════════════════════════════
+   CLICK / PARTÍCULAS
+══════════════════════════════════ */
+function clickEmoji(){
+  clicks++; agregarPuntos(1);
+  const d=document.getElementById('emoji-display');
+  d.style.transform='scale(1.4)'; setTimeout(()=>d.style.transform='',200);
+  crearParticulas();
+  if(clicks%5===0) mostrarCombo('🔥 COMBO x'+clicks);
+  if(clicks%10===0) crearParticulas();
+}
+function mostrarCombo(txt){
+  const wrap=document.getElementById('emoji-wrap');
+  const el=document.createElement('div');el.className='combo';el.textContent=txt;
+  wrap.appendChild(el);setTimeout(()=>el.remove(),1000);
+}
+function crearParticulas(){
+  const wrap=document.getElementById('emoji-wrap');
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.textContent=particulaActual;
+    p.style.fontSize=Math.random()*10+10+'px';
+    p.style.left='50%';p.style.top='50%';
+    const ang=Math.random()*Math.PI*2, dist=Math.random()*75+30;
+    p.style.setProperty('--tx',Math.cos(ang)*dist+'px');
+    p.style.setProperty('--ty',Math.sin(ang)*dist+'px');
+    p.style.animationDuration=(Math.random()*.4+.5)+'s';
+    wrap.appendChild(p); setTimeout(()=>p.remove(),900);
+  }
+}
+
+/* ══════════════════════════════════
+   HISTORIAL
+══════════════════════════════════ */
+function guardarHistorial(emoji, anim){
   const item={emoji,anim,ts:Date.now()};
   historial=[item,...historial.filter(h=>h.emoji!==emoji||h.anim!==anim)].slice(0,24);
-  try{localStorage.setItem('emoji_hist',JSON.stringify(historial));}catch{}
+  try{localStorage.setItem('mw_hist',JSON.stringify(historial));}catch{}
   renderHistorial();
 }
 function renderHistorial(){
   const grid=document.getElementById('hist-grid');
-  if(!historial.length){grid.innerHTML='<div style="color:var(--sutil);font-size:12px;font-weight:600">¡Empezá a animar!</div>';return;}
-  grid.innerHTML=historial.map((h)=>
+  if(!historial.length){grid.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:12px;font-weight:600">¡Empezá a animar!</div>';return;}
+  grid.innerHTML=historial.map(h=>
     `<div class="hist-item" data-emoji="${encodeURIComponent(h.emoji)}" data-anim="${h.anim}">
-      ${h.emoji}<span class="hist-lbl">${ANIMS.find(a=>a.id===h.anim)?.ico||'✨'}</span>
-      <span class="fav-toggle" data-emoji="${encodeURIComponent(h.emoji)}" style="font-size:12px;cursor:pointer">${favoritos.includes(h.emoji)?'⭐':'☆'}</span>
-    </div>`).join('');
-  grid.onclick = function(ev){
-    const fav = ev.target.closest('.fav-toggle');
+      ${h.emoji}<span class="hist-lbl">${ANIMS.find(a=>a.id===h.anim)?.ico||'⚽'}</span>
+      <span class="fav-toggle" data-emoji="${encodeURIComponent(h.emoji)}" style="font-size:11px;cursor:pointer">${favoritos.includes(h.emoji)?'⭐':'☆'}</span>
+    </div>`
+  ).join('');
+  grid.onclick=ev=>{
+    const fav=ev.target.closest('.fav-toggle');
     if(fav){toggleFav(decodeURIComponent(fav.dataset.emoji));return;}
-    const item = ev.target.closest('.hist-item');
-    if(item) cargarHistorial(decodeURIComponent(item.dataset.emoji), item.dataset.anim);
+    const item=ev.target.closest('.hist-item');
+    if(item) cargarHistorial(decodeURIComponent(item.dataset.emoji),item.dataset.anim);
   };
 }
-function cargarHistorial(emoji,anim){
-  selEmoji(emoji);animActual=anim;animarActual();toast('♻️ '+emoji+' cargado');
+function cargarHistorial(emoji, anim){
+  selEmoji(emoji); animActual=anim; animarActual(); toast('♻️ '+emoji+' cargado');
 }
 function toggleFav(emoji){
   if(favoritos.includes(emoji)){favoritos=favoritos.filter(f=>f!==emoji);toast('💔 Quitado');}
   else{favoritos=[emoji,...favoritos].slice(0,20);toast('⭐ Guardado!');agregarPuntos(3);}
-  try{localStorage.setItem('emoji_favs',JSON.stringify(favoritos));}catch{}
-  renderFavGrid();renderHistorial();
+  try{localStorage.setItem('mw_favs',JSON.stringify(favoritos));}catch{}
+  renderFavGrid(); renderHistorial();
 }
 function renderFavGrid(){
   const grid=document.getElementById('fav-grid');
-  if(!favoritos.length){grid.innerHTML='<div style="color:var(--sutil);font-size:12px;font-weight:600">Tocá ⭐ en el historial.</div>';return;}
+  if(!favoritos.length){grid.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:12px;font-weight:600">Tocá ⭐ para guardar.</div>';return;}
   grid.innerHTML=favoritos.map(e=>
-    `<div class="hist-item" data-emoji="${encodeURIComponent(e)}">${e}<span class="hist-lbl">⭐</span></div>`).join('');
-  grid.onclick = function(ev){
-    const item = ev.target.closest('.hist-item');
+    `<div class="hist-item" data-emoji="${encodeURIComponent(e)}">${e}<span class="hist-lbl">⭐</span></div>`
+  ).join('');
+  grid.onclick=ev=>{
+    const item=ev.target.closest('.hist-item');
     if(item){selEmoji(decodeURIComponent(item.dataset.emoji));animarActual();}
   };
 }
 function limpiarHistorial(){
-  historial=[];try{localStorage.removeItem('emoji_hist');}catch{}
+  historial=[];try{localStorage.removeItem('mw_hist');}catch{}
   renderHistorial();toast('🗑️ Limpiado');
 }
 function sorteoFavorito(){
   if(!favoritos.length){toast('❌ No hay favoritos aún');return;}
   const e=favoritos[Math.floor(Math.random()*favoritos.length)];
-  selEmoji(e);animarActual();toast('🎲 Favorito: '+e);
+  selEmoji(e);animarActual();toast('🎲 '+e);
 }
 
-function agregarPuntos(n){puntos+=n;try{localStorage.setItem('emoji_pts',puntos);}catch{}actualizarScore();}
+/* ══════════════════════════════════
+   PUNTOS
+══════════════════════════════════ */
+function agregarPuntos(n){
+  puntos+=n;try{localStorage.setItem('mw_pts',puntos);}catch{}actualizarScore();
+}
 function actualizarScore(){
-  const niv=puntos<50?'🌱':puntos<200?'⭐':puntos<500?'🌟':puntos<1000?'👑':'🏆';
+  const niv=puntos<50?'🌱':puntos<200?'⭐':puntos<500?'🏅':puntos<1000?'🏆':'👑';
   document.getElementById('score-badge').textContent=niv+' '+puntos+' pts';
 }
-function toggleDark(){
-  oscuro=!oscuro;document.body.classList.toggle('dark',oscuro);
-  document.getElementById('dark-btn').textContent=oscuro?'☀️':'🌙';
-  toast(oscuro?'🌙 Modo oscuro':'☀️ Modo claro');
-}
+
+/* ══════════════════════════════════
+   TOAST
+══════════════════════════════════ */
 let tTimer;
 function toast(msg){
   const t=document.getElementById('toast');
