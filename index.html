@@ -680,9 +680,17 @@ function irTab(id, btn){
    EMOJIS
 ══════════════════════════════════ */
 function renderCatTabs(){
-  document.getElementById('cat-tabs').innerHTML = Object.keys(CATS).map((c,i)=>
-    `<button class="cat-tab${i===0?' on':''}" onclick="selCat(${JSON.stringify(c)},this)">${c}</button>`
+  const tabs = document.getElementById('cat-tabs');
+  const keys = Object.keys(CATS);
+  tabs.innerHTML = keys.map((c,i)=>
+    `<button class="cat-tab${i===0?' on':''}" data-idx="${i}">${c}</button>`
   ).join('');
+  tabs.onclick = ev=>{
+    const btn = ev.target.closest('.cat-tab');
+    if(!btn) return;
+    const idx = parseInt(btn.dataset.idx);
+    selCat(keys[idx], btn);
+  };
 }
 function selCat(cat, btn){
   catActual=cat;
