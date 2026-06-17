@@ -573,8 +573,8 @@ function selCat(cat,btn){
   btn.classList.add('on');renderEmojiGrid();
 }
 function renderEmojiGrid(){
-  document.getElementById('emoji-grid').innerHTML=CATS[catActual].map(e=>
-    `<button class="emoji-btn${e===emojiActual?' sel':''}" onclick="selEmoji('${e}')">${e}</button>`).join('');
+  document.getElementById('emoji-grid').innerHTML=CATS[catActual].map((e,i)=>
+    `<button class="emoji-btn${e===emojiActual?' sel':''}" onclick="selEmoji(CATS[catActual][${i}])">${e}</button>`).join('');
 }
 function selEmoji(e){
   emojiActual=e;
@@ -973,10 +973,10 @@ function guardarHistorial(emoji,anim){
 function renderHistorial(){
   const grid=document.getElementById('hist-grid');
   if(!historial.length){grid.innerHTML='<div style="color:var(--sutil);font-size:12px;font-weight:600">¡Empezá a animar!</div>';return;}
-  grid.innerHTML=historial.map(h=>
-    `<div class="hist-item" onclick="cargarHistorial('${h.emoji}','${h.anim}')">
+  grid.innerHTML=historial.map((h,i)=>
+    `<div class="hist-item" onclick="cargarHistorial(historial[${i}].emoji,historial[${i}].anim)">
       ${h.emoji}<span class="hist-lbl">${ANIMS.find(a=>a.id===h.anim)?.ico||'✨'}</span>
-      <span onclick="event.stopPropagation();toggleFav('${h.emoji}')" style="font-size:12px;cursor:pointer">${favoritos.includes(h.emoji)?'⭐':'☆'}</span>
+      <span onclick="event.stopPropagation();toggleFav(historial[${i}].emoji)" style="font-size:12px;cursor:pointer">${favoritos.includes(h.emoji)?'⭐':'☆'}</span>
     </div>`).join('');
 }
 function cargarHistorial(emoji,anim){
@@ -991,8 +991,8 @@ function toggleFav(emoji){
 function renderFavGrid(){
   const grid=document.getElementById('fav-grid');
   if(!favoritos.length){grid.innerHTML='<div style="color:var(--sutil);font-size:12px;font-weight:600">Tocá ⭐ en el historial.</div>';return;}
-  grid.innerHTML=favoritos.map(e=>
-    `<div class="hist-item" onclick="selEmoji('${e}');animarActual()">${e}<span class="hist-lbl">⭐</span></div>`).join('');
+  grid.innerHTML=favoritos.map((e,i)=>
+    `<div class="hist-item" onclick="selEmoji(favoritos[${i}]);animarActual()">${e}<span class="hist-lbl">⭐</span></div>`).join('');
 }
 function limpiarHistorial(){
   historial=[];try{localStorage.removeItem('emoji_hist');}catch{}
