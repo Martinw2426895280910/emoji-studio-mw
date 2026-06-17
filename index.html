@@ -346,6 +346,7 @@ body{
 
 .pb{height:24px;}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
 </head>
 <body>
 <div class="cancha-bg"></div>
@@ -479,8 +480,11 @@ body{
     <button class="btn-main btn-gol"    onclick="compartirMensaje()">📤 Compartir</button>
   </div>
   <div class="btn-row" style="margin-top:0">
+    <button class="btn-main btn-rojo" id="btn-gif" onclick="exportarGIF()">🎬 Exportar GIF</button>
+    <button class="btn-main btn-azul" onclick="whatsapp()">💚 WhatsApp</button>
+  </div>
+  <div class="btn-row" style="margin-top:0">
     <button class="btn-main btn-verde" onclick="copiarTexto()">📋 Copiar texto</button>
-    <button class="btn-main btn-azul"  onclick="whatsapp()">💚 WhatsApp</button>
   </div>
 </div>
 
@@ -1023,6 +1027,159 @@ function exportarHTML(){
     else mostrarModal(html);
   }
 }
+
+/* ══════════════════════════════════
+   EXPORTAR GIF ANIMADO
+   Interpola manualmente los keyframes CSS
+   en transformaciones de canvas (scale/rotate/translate)
+══════════════════════════════════ */
+const GIF_FRAMES = {
+  golazo:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.15,s:1.6,r:-20,x:0,y:0},{t:.35,s:.8,r:15,x:0,y:-24},
+    {t:.55,s:1.3,r:-8,x:0,y:0},{t:.75,s:.95,r:4,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  festejo:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.25,s:1.25,r:-18,x:0,y:-45},{t:.55,s:1.1,r:14,x:0,y:-22},
+    {t:.8,s:1.18,r:-10,x:0,y:-38},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  penalty:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.15,s:.9,r:0,x:-8,y:0},{t:.3,s:1.1,r:0,x:8,y:0},
+    {t:.6,s:1.12,r:0,x:0,y:0},{t:.85,s:1.4,r:0,x:0,y:0},{t:.95,s:.8,r:0,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  albiceleste:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.3,s:1.18,r:6,x:0,y:0},{t:.6,s:.93,r:0,x:0,y:0},
+    {t:.8,s:1.12,r:-5,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  campeon:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.25,s:1.3,r:-5,x:0,y:0},{t:.5,s:.9,r:5,x:0,y:0},
+    {t:.75,s:1.2,r:-3,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  tiro:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.3,s:.8,r:180,x:20,y:0},{t:.6,s:1.4,r:360,x:0,y:0},{t:1,s:1,r:360,x:0,y:0}
+  ],
+  spinZoom:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.5,s:1.35,r:180,x:0,y:0},{t:1,s:1,r:360,x:0,y:0}
+  ],
+  heartbeat:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.15,s:1.35,r:0,x:0,y:0},{t:.3,s:1,r:0,x:0,y:0},
+    {t:.45,s:1.25,r:0,x:0,y:0},{t:.7,s:1,r:0,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  shake:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.15,s:1,r:0,x:-9,y:0},{t:.3,s:1,r:0,x:9,y:0},
+    {t:.45,s:1,r:0,x:-9,y:0},{t:.6,s:1,r:0,x:9,y:0},{t:.75,s:1,r:0,x:-9,y:0},
+    {t:.9,s:1,r:0,x:9,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  wobble:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.2,s:1,r:-12,x:0,y:0},{t:.4,s:1,r:10,x:0,y:0},
+    {t:.6,s:1,r:-6,x:0,y:0},{t:.8,s:1,r:3,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  jellyBounce:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.4,s:1.15,r:0,x:0,y:-32},{t:.7,s:.9,r:0,x:0,y:-12},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  float:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.5,s:1,r:0,x:0,y:-22},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  breathe:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.5,s:1.28,r:0,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  swing:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.25,s:1,r:16,x:0,y:0},{t:.75,s:1,r:-16,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  popcorn:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.2,s:.8,r:-5,x:0,y:0},{t:.4,s:1.35,r:5,x:0,y:0},
+    {t:.6,s:.9,r:-3,x:0,y:0},{t:.8,s:1.12,r:2,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  crazyDance:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.25,s:1.2,r:90,x:38,y:-38},{t:.5,s:.8,r:-180,x:-38,y:38},
+    {t:.75,s:1.1,r:270,x:18,y:-18},{t:1,s:1,r:360,x:0,y:0}
+  ],
+  liquidMorph:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.5,s:1.15,r:0,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  disco:[
+    {t:0,s:1,r:0,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  neon:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.5,s:1.05,r:0,x:0,y:0},{t:1,s:1,r:0,x:0,y:0}
+  ],
+  glitch:[
+    {t:0,s:1,r:0,x:0,y:0},{t:.2,s:1,r:0,x:-5,y:2},{t:.4,s:1,r:0,x:5,y:-2},
+    {t:.6,s:1,r:0,x:-2,y:5},{t:.8,s:1,r:0,x:3,y:-4},{t:1,s:1,r:0,x:0,y:0}
+  ],
+};
+function interpolarFrame(keyframes, progreso){
+  for(let i=0;i<keyframes.length-1;i++){
+    const a=keyframes[i], b=keyframes[i+1];
+    if(progreso>=a.t && progreso<=b.t){
+      const local = b.t===a.t ? 0 : (progreso-a.t)/(b.t-a.t);
+      return {
+        s: a.s+(b.s-a.s)*local,
+        r: a.r+(b.r-a.r)*local,
+        x: a.x+(b.x-a.x)*local,
+        y: a.y+(b.y-a.y)*local,
+      };
+    }
+  }
+  return keyframes[keyframes.length-1];
+}
+function exportarGIF(){
+  if(typeof GIF==='undefined'){ toast('❌ Cargando librería... reintentá'); return; }
+  const btn = document.getElementById('btn-gif');
+  btn.textContent='⏳ Generando...'; btn.style.opacity='.6';
+
+  const size = 300;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  const gif = new GIF({
+    workers: 2,
+    quality: 8,
+    width: size,
+    height: size,
+    workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js',
+    transparent: 0x00FF00
+  });
+
+  const frames = GIF_FRAMES[animActual] || GIF_FRAMES.float;
+  const totalFrames = 18;
+  const a = ANIMS.find(x=>x.id===animActual);
+  const durMs = ((a?a.dur:1)/velocidad)*1000;
+  const delayPerFrame = Math.max(20, Math.round(durMs/totalFrames));
+
+  for(let i=0;i<totalFrames;i++){
+    const progreso = i/(totalFrames-1);
+    const fr = interpolarFrame(frames, progreso);
+
+    ctx.fillStyle = '#00FF00';
+    ctx.fillRect(0,0,size,size);
+
+    ctx.save();
+    ctx.translate(size/2 + fr.x, size/2 + fr.y);
+    ctx.rotate(fr.r * Math.PI/180);
+    ctx.scale(fr.s, fr.s);
+    ctx.font = (size*0.55)+'px "Segoe UI Emoji","Noto Color Emoji",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emojiActual, 0, 0);
+    ctx.restore();
+
+    gif.addFrame(ctx, {copy:true, delay: delayPerFrame});
+  }
+
+  gif.on('finished', function(blob){
+    const url = URL.createObjectURL(blob);
+    const a2 = document.createElement('a');
+    a2.href = url; a2.download = 'mundial-'+emojiActual+'-'+animActual+'.gif';
+    document.body.appendChild(a2); a2.click(); document.body.removeChild(a2);
+    setTimeout(()=>URL.revokeObjectURL(url), 5000);
+    btn.textContent='🎬 Exportar GIF'; btn.style.opacity='1';
+    agregarPuntos(12); toast('🎬 ¡GIF exportado! Revisá Descargas');
+  });
+
+  gif.render();
+}
+
 function mostrarModal(html){
   const m=document.createElement('div');
   m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;flex-direction:column;padding:16px;gap:10px;';
